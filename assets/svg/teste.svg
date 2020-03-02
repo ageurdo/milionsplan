@@ -1,0 +1,62 @@
+import React from "react";
+
+function Icon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="25"
+      height="25"
+      viewBox="0 0 25 25"
+    >
+      <g id="Grupo_1421" data-name="Grupo 1421" transform="translate(-14 -15)">
+        <g id="Grupo_1420" data-name="Grupo 1420">
+          <g id="Grupo_1419" data-name="Grupo 1419">
+            <g
+              id="Grupo_1418"
+              data-name="Grupo 1418"
+              transform="translate(5 3)"
+            >
+              <circle
+                id="Elipse_4"
+                cx="12.5"
+                cy="12.5"
+                r="12.5"
+                fill="#fff"
+                data-name="Elipse 4"
+                transform="translate(9 12)"
+              ></circle>
+              <g
+                id="Grupo_1416"
+                data-name="Grupo 1416"
+                transform="translate(2 -.524)"
+              >
+                <g id="Grupo_1417" fill={theme.colors.defaultGreenColor} data-name="Grupo 1417">
+                  <path
+                    id="Caminho_13"
+                    d="M11.021 1.638H.464C.209 1.638 0 1.27 0 .819S.209 0 .464 0h10.557c.256 0 .464.368.464.819s-.208.819-.464.819z"
+                    data-name="Caminho 13"
+                    transform="translate(14 20.524)"
+                  ></path>
+                  <path
+                    id="Caminho_1710"
+                    d="M11.021 1.638H.464C.209 1.638 0 1.27 0 .819S.209 0 .464 0h10.557c.256 0 .464.368.464.819s-.208.819-.464.819z"
+                    data-name="Caminho 1710"
+                    transform="translate(14 24.561)"
+                  ></path>
+                  <path
+                    id="Caminho_1711"
+                    d="M11.021 1.638H.464C.209 1.638 0 1.27 0 .819S.209 0 .464 0h10.557c.256 0 .464.368.464.819s-.208.819-.464.819z"
+                    data-name="Caminho 1711"
+                    transform="translate(14 28.759)"
+                  ></path>
+                </g>
+              </g>
+            </g>
+          </g>
+        </g>
+      </g>
+    </svg>
+  );
+}
+
+export default Icon;
