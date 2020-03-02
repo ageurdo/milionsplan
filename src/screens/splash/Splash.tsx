@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
-import { useNavigation } from 'react-navigation-hooks'
+import { useNavigation } from '@react-navigation/native';
 import { fetchFonts } from './../../services/font-service';
 // import AccountStore from '../../stores/account-store';
 import { loadAsync } from 'expo-font';
-import Home from './../home/Home';
+import Home from '../revenue/Revenue';
 
 export default function Splash() {
 
@@ -23,7 +23,7 @@ export default function Splash() {
             // const isAuthenticated = await AccountStore.isAuthenticated();
 
             // if (isAuthenticated) {
-            navigate('Home');
+            navigate('Revenue');
             // } else {
             //     navigate("Login");
             // }

@@ -67,10 +67,12 @@ const styles = StyleSheet.create({
         marginBottom: -10,
         marginLeft: 5,
         color: '#747474',
+        fontFamily: theme.fonts.boldFont.fontFamily,
     },
     value: {
         fontSize: 50,
         color: theme.colors.defaultGreenColor,
+        fontFamily: theme.fonts.semiBoldFont.fontFamily,
 
     },
     containerPlusButton: {

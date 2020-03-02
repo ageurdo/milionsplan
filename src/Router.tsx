@@ -1,31 +1,53 @@
 import React from 'react';
-import { createAppContainer } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
 
-import Splash from './screens/splash/splash'
-import Home from './screens/home/Home'
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 
-const noHeaderNavigationOptions = {
-    headerShown: false,
+import Splash from './screens/splash/Splash'
+import Debt from './screens/debt/Debt';
+import Expenses from './screens/expenses/Expenses';
+import Investiments from './screens/investiments/Investiments';
+import Revenue from './screens/revenue/Revenue';
+
+const Stack = createStackNavigator();
+
+const Router = () => {
+    return (
+        <NavigationContainer>
+            <Stack.Navigator initialRouteName="Splash">
+                <Stack.Screen
+                    name="Splash"
+                    component={Splash}
+                    options={{
+                        headerShown: false,
+                        gestureEnabled: false,
+                        gestureDirection: "horizontal"
+                    }}
+                />
+                <Stack.Screen
+                    name="Revenue"
+                    component={Revenue}
+                    options={{ headerShown: false, gestureEnabled: false }}
+                />
+                <Stack.Screen
+                    name="Debt"
+                    component={Debt}
+                    options={{ headerShown: false, gestureEnabled: false }}
+                />
+                <Stack.Screen
+                    name="Expenses"
+                    component={Expenses}
+                    options={{ headerShown: false, gestureEnabled: false }}
+                />
+                <Stack.Screen
+                    name="Investiments"
+                    component={Investiments}
+                    options={{ headerShown: false, gestureEnabled: false }}
+                />
+            </Stack.Navigator>
+        </NavigationContainer >
+    )
+
 }
 
-const noNavegableHeaderNavigationOptions = {
-    gestureEnable: false,
-    ...noHeaderNavigationOptions
-};
-
-const AppNavigator = createStackNavigator({
-    Splash: {
-        screen: Splash,
-        navigationOptions: noNavegableHeaderNavigationOptions
-    },
-    Home: {
-        screen: Home,
-        navigationOptions: noNavegableHeaderNavigationOptions
-    },
-},
-    {
-        initialRouteName: 'Splash',
-    });
-
-export default createAppContainer(AppNavigator);
+export default Router;

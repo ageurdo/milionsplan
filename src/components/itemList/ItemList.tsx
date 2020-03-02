@@ -6,7 +6,7 @@ import theme from '../../constants/theme';
 
 export interface Item {
     id: string,
-    title: string,
+    titleEntry: string,
     dateTime: string,
     bucks: string,
 
@@ -21,7 +21,7 @@ const ItemList: React.FC<Item> = (props) => {
             </View>
 
             <View>
-                <Text style={styles.title}>{props.title}</Text>
+                <Text style={styles.title}>{props.titleEntry}</Text>
                 <Text style={styles.dateTime}>{props.dateTime}</Text>
             </View>
 
@@ -57,12 +57,14 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 18,
         fontWeight: '500',
-        color: '#747474'
+        color: '#747474',
+        fontFamily: theme.fonts.boldFont.fontFamily,
     },
 
     dateTime: {
         fontSize: 11,
-        color: '#A2A2A2'
+        color: '#A2A2A2',
+        fontFamily: theme.fonts.default.fontFamily,
     },
 
     containerBucks: {
@@ -70,11 +72,11 @@ const styles = StyleSheet.create({
     },
 
     bucks: {
+        paddingRight: 15,
         fontSize: 20,
         textAlign: 'right',
-        fontWeight: '700',
-        color: '#747474'
-
+        color: '#747474',
+        fontFamily: theme.fonts.boldFont.fontFamily,
     },
 
     containerIcon: {

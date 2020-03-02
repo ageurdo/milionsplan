@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { Image, View, TouchableOpacity, Text, StyleSheet, TextInput, ImageBackground } from 'react-native';
 import { verticalScale, scale } from 'react-native-size-matters';
 import theme from './../../constants/theme';
+import { Item } from './../../components/itemList/ItemList'
 
 export interface Props {
     label: string,
     btnConfirm: string,
     btnCancel: string,
-    btnConfirmPress: () => void,
+    btnConfirmPress: (obj: Item) => void,
     btnCancelPress: () => void,
-    visibleModal: boolean,
     img?: string,
 }
 
@@ -17,6 +17,16 @@ export interface Props {
 
 const Prompt: React.FC<Props> = (props) => {
 
+    const [titleEntry, setTitleEntry] = useState<string>('');
+    const [BucksEntry, setBucksEntry] = useState<string>('');
+
+
+    const objeto: Item = {
+        id: new Date().toString(),
+        titleEntry: titleEntry,
+        bucks: BucksEntry,
+        dateTime: new Date().toString(),
+    }
     return (
         <View style={styles.container}>
             <View style={styles.containerModal}>
@@ -30,8 +40,9 @@ const Prompt: React.FC<Props> = (props) => {
                     <Text style={styles.label}>{props.label}</Text>
 
 
-                    <View style={styles.input}>
-                        <TextInput style={{ fontSize: 40 }} />
+                    <View style={styles.containerInput}>
+                        <TextInput style={styles.input} onChangeText={setTitleEntry} value={titleEntry} />
+                        <TextInput style={{ flex: 1 }} onChangeText={setBucksEntry} value={BucksEntry} />
                     </View>
                 </View>
 
@@ -41,7 +52,10 @@ const Prompt: React.FC<Props> = (props) => {
                             {props.btnCancel}
                         </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.buttonOk}>
+                    <TouchableOpacity style={styles.buttonOk} onPress={() => {
+                        props.btnConfirmPress(objeto);
+                        setTitleEntry('')
+                    }}>
                         <Text style={styles.buttonTextOk}>
                             {props.btnConfirm}
                         </Text>
@@ -77,7 +91,8 @@ const styles = StyleSheet.create({
         fontSize: verticalScale(18),
         marginBottom: 20,
     },
-    input: {
+    containerInput: {
+        flexDirection: 'row',
         width: verticalScale(250),
         justifyContent: 'center',
         alignSelf: 'center',
@@ -85,6 +100,11 @@ const styles = StyleSheet.create({
         height: verticalScale(30),
         borderColor: 'grey',
         borderWidth: 0.7,
+
+    },
+    input: {
+        width: "80%",
+        marginHorizontal: 5,
 
     },
     containerIcon: {
