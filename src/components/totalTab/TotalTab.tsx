@@ -7,7 +7,6 @@ import { Platform } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 
 
-
 export interface Props {
     label: string,
     value: string,
@@ -60,7 +59,7 @@ const styles = StyleSheet.create({
         height: verticalScale(80),
         backgroundColor: 'white',
         borderRadius: 10,
-        elevation: 2,
+        ...theme.shadow1,
     },
     label: {
         fontSize: 15,

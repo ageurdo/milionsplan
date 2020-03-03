@@ -1,35 +1,62 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Platform } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { moderateScale } from 'react-native-size-matters';
+import { moderateScale, verticalScale } from 'react-native-size-matters';
 import theme from '../../constants/theme';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
+import { platform } from 'os';
 
 export interface Item {
     id: string,
     titleEntry: string,
     dateTime: string,
     bucks: string,
+    btnRemovePress: () => void,
 
 };
 
 const ItemList: React.FC<Item> = (props) => {
+
+    function RightAction() {
+        return (
+            <View style={styles.rightAction}>
+                <TouchableOpacity onPress={() => { props.btnRemovePress() }}>
+                    <Feather name="trash-2" size={28} color='#fff' />
+                </TouchableOpacity>
+            </View>
+        );
+    }
+
+    function LeftAction() {
+        return (
+            <View style={styles.leftAction}>
+                <TouchableOpacity onPress={() => { props.btnRemovePress() }}>
+                    <Feather name="edit" size={28} color='#fff' />
+                </TouchableOpacity>
+            </View>
+        );
+    }
+
     return (
-        <TouchableOpacity style={styles.container}>
+        <Swipeable
+            renderRightActions={RightAction}
+            renderLeftActions={LeftAction}
+        >
+            <TouchableOpacity style={styles.container}>
+                <View style={styles.containerIcon}>
+                    <Feather name="dollar-sign" size={18} color='#fff' />
+                </View>
 
-            <View style={styles.containerIcon}>
-                <Feather name="dollar-sign" size={18} color='#fff' />
-            </View>
+                <View>
+                    <Text style={styles.title}>{props.titleEntry}</Text>
+                    <Text style={styles.dateTime}>{props.dateTime}</Text>
+                </View>
 
-            <View>
-                <Text style={styles.title}>{props.titleEntry}</Text>
-                <Text style={styles.dateTime}>{props.dateTime}</Text>
-            </View>
-
-            <View style={styles.containerBucks}>
-                <Text style={styles.bucks}>{props.bucks}</Text>
-            </View>
-
-        </TouchableOpacity >
+                <View style={styles.containerBucks}>
+                    <Text style={styles.bucks}>{props.bucks}</Text>
+                </View>
+            </TouchableOpacity >
+        </Swipeable>
     );
 
 }
@@ -51,7 +78,8 @@ const styles = StyleSheet.create({
         borderRadius: 10,
 
         backgroundColor: '#fff',
-        ...theme.shadow,
+        ...theme.shadow1,
+
     },
 
     title: {
@@ -87,6 +115,30 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginRight: 20,
+    },
+    rightAction: {
+        width: verticalScale(50),
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginVertical: 5,
+        left: Platform.OS == 'web' ? -20 : 20,
+        marginRight: -10,
+        borderTopRightRadius: 10,
+        borderBottomRightRadius: 10,
+        backgroundColor: '#FF6060',
+        ...theme.shadow1,
+    },
+    leftAction: {
+        width: verticalScale(50),
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginVertical: 5,
+        left: Platform.OS == 'web' ? -20 : 10,
+        marginRight: -10,
+        borderTopLeftRadius: 10,
+        borderBottomLeftRadius: 10,
+        backgroundColor: '#7EADD6',
+        ...theme.shadow1,
     },
 });
 

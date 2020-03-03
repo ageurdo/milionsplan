@@ -11,15 +11,8 @@ import Debt from '../debt/Debt';
 import Expenses from '../expenses/Expenses';
 import investiments from '../investiments/Investiments';
 import { AsyncStorage } from 'react-native';
+import { TapGestureHandler, RotationGestureHandler, TouchableOpacity } from 'react-native-gesture-handler';
 
-const data: Item[] = [
-    {
-        id: new Date().toString(),
-        titleEntry: 'Salário',
-        dateTime: '26/02/2020 às 08:02',
-        bucks: '$3000',
-    },
-];
 
 const Home: React.FC = () => {
 
@@ -38,6 +31,7 @@ const Home: React.FC = () => {
     );
 
 
+
     function _renderItem(revenue: Item, index) {
         return (
             < ItemList
@@ -45,13 +39,14 @@ const Home: React.FC = () => {
                 titleEntry={revenue.titleEntry}
                 dateTime={revenue.dateTime}
                 bucks={revenue.bucks}
+                btnRemovePress={() => { remove(revenue.id) }}
             />
         );
     }
 
     async function setData(revenue: Item) {
         try {
-            let newRevenues = [...revenues, revenue]
+            let newRevenues = [...revenues, revenue];
             AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newRevenues));
         } catch (error) {
             // Error saving data
@@ -69,6 +64,7 @@ const Home: React.FC = () => {
                     if (response !== null) {
                         // We have data!!
                         newRevenue = JSON.parse(response);
+                        console.log(newRevenue);
                     }
                     setRevenues(newRevenue);
                 });
@@ -82,6 +78,31 @@ const Home: React.FC = () => {
         }
     };
 
+    async function remove(id: string) {
+        // let result = await Promise.all(revenues.map((item) => AsyncStorage.getItem(item.id)));
+        // result = result.filter(Boolean); // filter all non-truthy values
+        // console.log('result', result);
+        try {
+            AsyncStorage.getItem(STORAGE_KEY)
+                .then((response) => {
+                    let newRevenues = [];
+                    if (response !== null) {
+                        // We have data!!
+                        newRevenues = JSON.parse(response).filter(e => e.id !== id);
+                        console.log(newRevenues);
+                    }
+                    setRevenues(newRevenues);
+                    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newRevenues));
+                });
+
+        } catch (error) {
+            // Error retrieving data
+            (response) => {
+                console.error(response)
+                setRevenues([]);
+            }
+        }
+    }
 
     function _renderModal() {
         return (
@@ -150,7 +171,8 @@ const styles = StyleSheet.create({
     },
     menu: {
         // zIndex: 5,
-    }
+    },
+
 });
 
 export default Home;

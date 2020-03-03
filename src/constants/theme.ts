@@ -8,8 +8,16 @@ export default {
     windowWidth: width,
     windowHeight: height,
 
-    shadow: {
-        elevation: 4,
+    shadow1: {
+        elevation: 3,
+        shadowOffset: { width: 1, height: 2 },
+        shadowColor: "#8D8D8D",
+        shadowOpacity: 0.5,
+        shadowRadius: 10,
+    },
+
+    shadow10: {
+        elevation: 10,
         shadowOffset: { width: 1, height: 2 },
         shadowColor: "#8D8D8D",
         shadowOpacity: 0.5,

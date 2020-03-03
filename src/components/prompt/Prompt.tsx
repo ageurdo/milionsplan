@@ -13,8 +13,6 @@ export interface Props {
     img?: string,
 }
 
-// const [visibleModal, setVisibleModal] = useState(visible);
-
 const Prompt: React.FC<Props> = (props) => {
 
     const [titleEntry, setTitleEntry] = useState<string>('');
@@ -38,12 +36,9 @@ const Prompt: React.FC<Props> = (props) => {
                 <View style={styles.content}>
 
                     <Text style={styles.label}>{props.label}</Text>
+                    <TextInput placeholder={'Descrição'} style={[styles.input]} onChangeText={setTitleEntry} value={titleEntry} />
+                    <TextInput keyboardType={"numeric"} placeholder={'Valor'} style={[styles.input]} onChangeText={setBucksEntry} value={BucksEntry} />
 
-
-                    <View style={styles.containerInput}>
-                        <TextInput style={styles.input} onChangeText={setTitleEntry} value={titleEntry} />
-                        <TextInput style={{ flex: 1 }} onChangeText={setBucksEntry} value={BucksEntry} />
-                    </View>
                 </View>
 
                 <View style={styles.containerButton}>
@@ -72,11 +67,11 @@ const styles = StyleSheet.create({
         height: '100%',
         justifyContent: 'center',
         alignItems: 'center',
-        elevation: 2,
+        ...theme.shadow10,
     },
     containerModal: {
         width: verticalScale(300),
-        height: verticalScale(200),
+        height: verticalScale(230),
         backgroundColor: 'white',
         position: "absolute",
         borderRadius: 10,
@@ -84,29 +79,43 @@ const styles = StyleSheet.create({
     },
     content: {
         marginBottom: 20,
+
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginHorizontal: 30,
+        flexDirection: 'column',
+        borderRadius: 5,
+        borderColor: 'grey',
     },
     label: {
         textAlign: 'center',
         color: 'black',
         fontSize: verticalScale(18),
         marginBottom: 20,
+        marginEnd: 30,
     },
+
     containerInput: {
-        flexDirection: 'row',
-        width: verticalScale(250),
+        alignItems: 'center',
         justifyContent: 'center',
-        alignSelf: 'center',
+        marginHorizontal: 30,
+        flexDirection: 'column',
         borderRadius: 5,
         height: verticalScale(30),
         borderColor: 'grey',
-        borderWidth: 0.7,
 
     },
     input: {
-        width: "80%",
+        width: '100%',
+        borderWidth: 0.7,
+        borderColor: 'grey',
         marginHorizontal: 5,
-
+        borderRadius: 5,
+        fontSize: verticalScale(20),
+        marginVertical: 5,
+        height: verticalScale(30),
     },
+
     containerIcon: {
         width: verticalScale(80),
         height: verticalScale(80),
@@ -125,7 +134,6 @@ const styles = StyleSheet.create({
     containerButton: {
         flexDirection: 'row',
         height: verticalScale(50),
-        top: 1,
     },
     buttonOk: {
         backgroundColor: theme.colors.defaultGreenColor,
@@ -140,7 +148,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: verticalScale(18),
         width: verticalScale(150),
-        bottom: 0,
         color: 'white',
     },
     buttonTextCancel: {
@@ -148,7 +155,6 @@ const styles = StyleSheet.create({
         color: '#505050',
         fontSize: verticalScale(18),
         width: verticalScale(150),
-        bottom: 0,
     },
 });
 export default Prompt;
