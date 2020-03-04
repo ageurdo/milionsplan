@@ -9,14 +9,14 @@ import { Feather } from '@expo/vector-icons';
 
 export interface Props {
     label: string,
-    value: string,
+    value: number,
     onPress: () => void,
 }
 
 function LottieMoney() {
     return (
         <View style={{ width: 150, height: 150, justifyContent: 'center', alignItems: 'center' }}>
-            <Lottie resizeMode="cover" source={require('./../../../assets/json/money.json')} autoPlay loop />
+            <Lottie resizeMode="cover" source={require('./../../../assets/json/money.json')} autoPlay />
         </View>
     );
 }

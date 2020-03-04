@@ -10,7 +10,7 @@ export interface Item {
     id: string,
     description: string,
     dateTime: string,
-    bucks: string,
+    bucks: number,
     btnRemovePress?: () => void,
     btnEditPress?: () => void,
 
@@ -134,11 +134,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginVertical: 5,
-        left: Platform.OS == 'web' ? -20 : 10,
+        left: Platform.OS == 'web' ? 10 : 10,
         marginRight: -10,
         borderTopLeftRadius: 10,
         borderBottomLeftRadius: 10,
-        backgroundColor: '#7EADD6',
+        backgroundColor: theme.colors.defaultGreenColor,
         ...theme.shadow1,
     },
 });

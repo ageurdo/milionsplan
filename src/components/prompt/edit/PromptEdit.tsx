@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Image, View, TouchableOpacity, Text, StyleSheet, TextInput, ImageBackground } from 'react-native';
+import { Image, View, TouchableOpacity, Text, StyleSheet, TextInput } from 'react-native';
 import { verticalScale, scale } from 'react-native-size-matters';
 import theme from '../../../constants/theme';
 import { Item } from '../../itemList/ItemList'
@@ -11,21 +11,20 @@ export interface Props {
     btnConfirmPress: (obj: Item) => void,
     btnCancelPress: () => void,
     img?: string,
-    inputDescription?: any,
-    inputValue?: any,
+    item?: Item,
 }
 
 const PromptEdit: React.FC<Props> = (props) => {
 
-    const [description, setDescription] = useState<string>('');
-    const [BucksEntry, setBucksEntry] = useState<string>('');
+    const [description, setDescription] = useState<string>(props.item.description);
+    const [BucksEntry, setBucksEntry] = useState<string>(props.item.bucks);
 
 
-    const objeto: Item = {
-        id: new Date().toString(),
+    const object: Item = {
+        id: props.item.id,
         description: description,
         bucks: BucksEntry,
-        dateTime: new Date().toString(),
+        dateTime: props.item.dateTime,
     }
     return (
         <View style={styles.container}>
@@ -44,12 +43,12 @@ const PromptEdit: React.FC<Props> = (props) => {
                     <TextInput placeholder={'Descrição'}
                         style={[styles.input]}
                         onChangeText={setDescription}
-                        value={description ? description : props.inputDescription} />
+                        value={description} />
                     <TextInput keyboardType={"numeric"}
                         placeholder={'Valor'}
                         style={[styles.input]}
                         onChangeText={setBucksEntry}
-                        value={BucksEntry ? BucksEntry : props.inputValue} />
+                        value={BucksEntry} />
 
                 </View>
 
@@ -60,7 +59,7 @@ const PromptEdit: React.FC<Props> = (props) => {
                         </Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.buttonOk} onPress={() => {
-                        props.btnConfirmPress(objeto);
+                        props.btnConfirmPress(object);
                         setDescription('')
                     }}>
                         <Text style={styles.buttonTextOk}>

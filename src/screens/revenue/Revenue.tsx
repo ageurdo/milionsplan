@@ -14,15 +14,18 @@ import { AsyncStorage } from 'react-native';
 import { TapGestureHandler, RotationGestureHandler, TouchableOpacity } from 'react-native-gesture-handler';
 import PromptEdit from '../../components/prompt/edit/PromptEdit';
 import PromptInsert from '../../components/prompt/insert/PromptInsert';
+import { parse } from 'react-native-svg';
 
 
-const Home: React.FC = () => {
+const Revenue: React.FC = () => {
 
     const { navigate } = useNavigation();
     const [promptInsertVisible, setPromptInsertVisible] = useState(false);
     const [promptEditVisible, setPromptEditVisible] = useState(false);
+    const [sum, setSum] = useState();
 
     const [revenues, setRevenues] = useState<Item[]>([]);
+    const [teste, setTeste] = useState<Item>(null);
 
     const STORAGE_KEY = 'revenue'
 
@@ -41,7 +44,10 @@ const Home: React.FC = () => {
                 dateTime={revenue.dateTime}
                 bucks={revenue.bucks}
                 btnRemovePress={() => { remove(revenue.id) }}
-                btnEditPress={() => setPromptEditVisible(true)}
+                btnEditPress={() => {
+                    setTeste(revenue);
+                    setPromptEditVisible(true)
+                }}
             />
         );
     }
@@ -52,6 +58,44 @@ const Home: React.FC = () => {
             AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newRevenues));
         } catch (error) {
             // Error saving data
+            console.error(error, "erro ao atualizar")
+        }
+        finally {
+            setPromptInsertVisible(false);
+            setPromptEditVisible(false);
+            _sum();
+        }
+    };
+
+    async function updateData(revenue: Item) {
+
+
+        try {
+            // console.log(revenue, 'Item Revenue chegando')
+            // let index = revenues.indexOf(revenues.find((e) => e.id == revenue.id));
+            // revenues[index] = revenue;
+
+            for (let index = 0; index < revenues.length; index++) {
+
+
+                if (revenues[index].id == revenue.id) {
+                    //altera
+                    revenues[index] = revenue;
+                    console.log(revenues[index], 'alterado');
+
+                    setRevenues(revenues);
+                    console.log(revenues, 'Lista alterada');
+                    break;
+                }
+            }
+
+            AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(revenues));
+
+
+
+        } catch (error) {
+            // Error saving data
+            console.error(error, "erro ao atualizar")
         }
         finally {
             setPromptInsertVisible(false);
@@ -67,7 +111,6 @@ const Home: React.FC = () => {
                     if (response !== null) {
                         // We have data!!
                         newRevenue = JSON.parse(response);
-                        console.log(newRevenue);
                     }
                     setRevenues(newRevenue);
                 });
@@ -89,7 +132,6 @@ const Home: React.FC = () => {
                     if (response !== null) {
                         // We have data!!
                         newRevenues = JSON.parse(response).filter(e => e.id !== id);
-                        console.log(newRevenues);
                     }
                     setRevenues(newRevenues);
                     AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newRevenues));
@@ -102,19 +144,22 @@ const Home: React.FC = () => {
                 setRevenues([]);
             }
         }
+        finally {
+            _sum();
+        }
     }
 
     function _renderPromptEdit(revenue?: Item) {
+
         return (
-            promptEditVisible &&
             <View style={styles.prompt}>
                 <PromptEdit label={'Edite os dados da sua receita'}
                     labelBtnConfirm={'Salvar'}
                     labelBtnCancel={'Fechar'}
-                    btnConfirmPress={setData}
+                    btnConfirmPress={updateData}
                     btnCancelPress={() => { setPromptEditVisible(false) }}
-                    inputDescription={'revenue.description.toString()'}
-                    inputValue={'revenue.bucks.toString()'}
+                    item={revenue}
+
                 />
             </View>
         )
@@ -134,11 +179,30 @@ const Home: React.FC = () => {
         )
     }
 
+    function _sum() {
+        let calc;
+        let bucks;
+        for (let index = 0; index < revenues.length; index++) {
+            if (revenues[index] !== null) {
+                bucks = (revenues[index].bucks);
+                calc = calc + parseFloat(bucks);
+                console.log(calc, 'calc aqui');
+                console.log(bucks, 'bucks aqui');
+                console.log(sum, 'soma aqui');
+            }
+            else
+                setSum(0);
+        }
+        setSum(calc);
+    }
+
     return (
         <View style={styles.container}>
             <Header style={styles.header} />
             <View style={styles.totalTab}>
-                <Totaltab label={'Total'} value={'5000'} onPress={() => { setPromptInsertVisible(true) }} />
+                <Totaltab label={'Total'}
+                    value={sum}
+                    onPress={() => { setPromptInsertVisible(true) }} />
             </View>
             <FlatList
                 style={styles.flatlist}
@@ -157,7 +221,11 @@ const Home: React.FC = () => {
             </View>
 
             {_renderPromptInsert()}
-            {_renderPromptEdit()}
+
+            {
+                promptEditVisible &&
+                _renderPromptEdit(teste)
+            }
         </View>
     );
 };
@@ -191,4 +259,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default Home;
+export default Revenue;
