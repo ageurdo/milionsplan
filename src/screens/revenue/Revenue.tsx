@@ -113,8 +113,8 @@ const Home: React.FC = () => {
                     labelBtnCancel={'Fechar'}
                     btnConfirmPress={setData}
                     btnCancelPress={() => { setPromptEditVisible(false) }}
-                    inputDescription={revenue.description.toString()}
-                    inputValue={revenue.bucks.toString()}
+                    inputDescription={'revenue.description.toString()'}
+                    inputValue={'revenue.bucks.toString()'}
                 />
             </View>
         )
