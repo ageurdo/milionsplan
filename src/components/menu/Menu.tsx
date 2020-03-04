@@ -17,11 +17,11 @@ const Menu: React.FC<Props> = (props) => {
     return (
         <View style={styles.container}>
             <TouchableOpacity onPress={() => { props.onRevenuePress() }} style={styles.containerButton}>
-                <Feather name='image' color='#fff' size={50} />
+                <Feather name='image' color='#fff' size={35} />
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => { props.onExpensesPress() }} style={styles.containerButton}>
-                <Feather name='inbox' color='#fff' size={50} />
+                <Feather name='inbox' color='#fff' size={35} />
             </TouchableOpacity>
 
             <View style={styles.containerPlusButton}>
@@ -30,11 +30,11 @@ const Menu: React.FC<Props> = (props) => {
                 </TouchableOpacity>
             </View>
             <TouchableOpacity onPress={() => { props.onDebtPress() }} style={styles.containerButton}>
-                <Feather name='layers' color='#fff' size={50} />
+                <Feather name='layers' color='#fff' size={35} />
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => { props.onInvestimentsPress() }} style={styles.containerButton}>
-                <Feather name='lock' color='#fff' size={50} />
+                <Feather name='lock' color='#fff' size={35} />
             </TouchableOpacity>
         </View>
     );

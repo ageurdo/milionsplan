@@ -8,10 +8,11 @@ import { platform } from 'os';
 
 export interface Item {
     id: string,
-    titleEntry: string,
+    description: string,
     dateTime: string,
     bucks: string,
-    btnRemovePress: () => void,
+    btnRemovePress?: () => void,
+    btnEditPress?: () => void,
 
 };
 
@@ -30,7 +31,7 @@ const ItemList: React.FC<Item> = (props) => {
     function LeftAction() {
         return (
             <View style={styles.leftAction}>
-                <TouchableOpacity onPress={() => { props.btnRemovePress() }}>
+                <TouchableOpacity onPress={() => { props.btnEditPress() }}>
                     <Feather name="edit" size={28} color='#fff' />
                 </TouchableOpacity>
             </View>
@@ -48,7 +49,7 @@ const ItemList: React.FC<Item> = (props) => {
                 </View>
 
                 <View>
-                    <Text style={styles.title}>{props.titleEntry}</Text>
+                    <Text style={styles.title}>{props.description}</Text>
                     <Text style={styles.dateTime}>{props.dateTime}</Text>
                 </View>
 

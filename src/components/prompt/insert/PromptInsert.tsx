@@ -1,27 +1,29 @@
 import React, { useState } from 'react';
 import { Image, View, TouchableOpacity, Text, StyleSheet, TextInput, ImageBackground } from 'react-native';
 import { verticalScale, scale } from 'react-native-size-matters';
-import theme from './../../constants/theme';
-import { Item } from './../../components/itemList/ItemList'
+import theme from '../../../constants/theme';
+import { Item } from '../../itemList/ItemList'
 
 export interface Props {
     label: string,
-    btnConfirm: string,
-    btnCancel: string,
+    labelBtnConfirm: string,
+    labelBtnCancel: string,
     btnConfirmPress: (obj: Item) => void,
     btnCancelPress: () => void,
     img?: string,
+    inputDescription?: string,
+    inputValue?: string,
 }
 
-const Prompt: React.FC<Props> = (props) => {
+const PromptInsert: React.FC<Props> = (props) => {
 
-    const [titleEntry, setTitleEntry] = useState<string>('');
+    const [description, setDescription] = useState<string>('');
     const [BucksEntry, setBucksEntry] = useState<string>('');
 
 
     const objeto: Item = {
         id: new Date().toString(),
-        titleEntry: titleEntry,
+        description: description,
         bucks: BucksEntry,
         dateTime: new Date().toString(),
     }
@@ -30,29 +32,39 @@ const Prompt: React.FC<Props> = (props) => {
             <View style={styles.containerModal}>
                 <View style={styles.containerIcon}>
                     <Image
-                        source={require('./../../../assets/logo.png')}
+                        source={require('./../../../../assets/logo.png')}
                         style={styles.icon} />
                 </View>
                 <View style={styles.content}>
 
-                    <Text style={styles.label}>{props.label}</Text>
-                    <TextInput placeholder={'Descrição'} style={[styles.input]} onChangeText={setTitleEntry} value={titleEntry} />
-                    <TextInput keyboardType={"numeric"} placeholder={'Valor'} style={[styles.input]} onChangeText={setBucksEntry} value={BucksEntry} />
+                    <Text style={styles.label}>
+                        {props.label}
+                    </Text>
+
+                    <TextInput placeholder={'Descrição'}
+                        style={[styles.input]}
+                        onChangeText={setDescription}
+                        value={description} />
+                    <TextInput keyboardType={"numeric"}
+                        placeholder={'Valor'}
+                        style={[styles.input]}
+                        onChangeText={setBucksEntry}
+                        value={BucksEntry} />
 
                 </View>
 
                 <View style={styles.containerButton}>
                     <TouchableOpacity onPress={props.btnCancelPress} style={styles.buttonCancel}>
                         <Text style={styles.buttonTextCancel}>
-                            {props.btnCancel}
+                            {props.labelBtnCancel}
                         </Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.buttonOk} onPress={() => {
                         props.btnConfirmPress(objeto);
-                        setTitleEntry('')
+                        setDescription('')
                     }}>
                         <Text style={styles.buttonTextOk}>
-                            {props.btnConfirm}
+                            {props.labelBtnConfirm}
                         </Text>
                     </TouchableOpacity>
                 </View>
@@ -157,4 +169,4 @@ const styles = StyleSheet.create({
         width: verticalScale(150),
     },
 });
-export default Prompt;
+export default PromptInsert;

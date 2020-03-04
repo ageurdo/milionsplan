@@ -1,23 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, Text, StyleSheet, FlatList, ImageEditor } from 'react-native';
 import Header from '../../components/header/Header';
 import ItemList, { Item } from '../../components/itemList/ItemList';
 import Totaltab from '../../components/totalTab/TotalTab';
 import Menu from '../../components/menu/Menu';
 import { verticalScale } from 'react-native-size-matters';
-import Prompt from '../../components/prompt/Prompt';
+import Prompt from '../../components/prompt/insert/PromptInsert';
 import { useNavigation } from '@react-navigation/native';
 import Debt from '../debt/Debt';
 import Expenses from '../expenses/Expenses';
 import investiments from '../investiments/Investiments';
 import { AsyncStorage } from 'react-native';
 import { TapGestureHandler, RotationGestureHandler, TouchableOpacity } from 'react-native-gesture-handler';
+import PromptEdit from '../../components/prompt/edit/PromptEdit';
+import PromptInsert from '../../components/prompt/insert/PromptInsert';
 
 
 const Home: React.FC = () => {
 
     const { navigate } = useNavigation();
-    const [modalVisible, setModalVisible] = useState(false);
+    const [promptInsertVisible, setPromptInsertVisible] = useState(false);
+    const [promptEditVisible, setPromptEditVisible] = useState(false);
 
     const [revenues, setRevenues] = useState<Item[]>([]);
 
@@ -27,19 +30,18 @@ const Home: React.FC = () => {
         () => {
             getData();
         },
-        [modalVisible]
+        [promptInsertVisible, promptEditVisible]
     );
-
-
 
     function _renderItem(revenue: Item, index) {
         return (
             < ItemList
                 id={revenue.id}
-                titleEntry={revenue.titleEntry}
+                description={revenue.description}
                 dateTime={revenue.dateTime}
                 bucks={revenue.bucks}
                 btnRemovePress={() => { remove(revenue.id) }}
+                btnEditPress={() => setPromptEditVisible(true)}
             />
         );
     }
@@ -52,7 +54,8 @@ const Home: React.FC = () => {
             // Error saving data
         }
         finally {
-            setModalVisible(false);
+            setPromptInsertVisible(false);
+            setPromptEditVisible(false);
         }
     };
 
@@ -79,9 +82,6 @@ const Home: React.FC = () => {
     };
 
     async function remove(id: string) {
-        // let result = await Promise.all(revenues.map((item) => AsyncStorage.getItem(item.id)));
-        // result = result.filter(Boolean); // filter all non-truthy values
-        // console.log('result', result);
         try {
             AsyncStorage.getItem(STORAGE_KEY)
                 .then((response) => {
@@ -104,26 +104,41 @@ const Home: React.FC = () => {
         }
     }
 
-    function _renderModal() {
+    function _renderPromptEdit(revenue?: Item) {
         return (
-            modalVisible &&
+            promptEditVisible &&
             <View style={styles.prompt}>
-                <Prompt label={'Insira sua nova receita'}
-                    btnConfirm={'Inserir'}
-                    btnCancel={'Fechar'}
+                <PromptEdit label={'Edite os dados da sua receita'}
+                    labelBtnConfirm={'Salvar'}
+                    labelBtnCancel={'Fechar'}
                     btnConfirmPress={setData}
-                    btnCancelPress={() => { setModalVisible(false) }}
+                    btnCancelPress={() => { setPromptEditVisible(false) }}
+                    inputDescription={revenue.description.toString()}
+                    inputValue={revenue.bucks.toString()}
                 />
             </View>
         )
     }
 
+    function _renderPromptInsert() {
+        return (
+            promptInsertVisible &&
+            <View style={styles.prompt}>
+                <PromptInsert label={'Insira sua nova receita'}
+                    labelBtnConfirm={'Inserir'}
+                    labelBtnCancel={'Fechar'}
+                    btnConfirmPress={setData}
+                    btnCancelPress={() => { setPromptInsertVisible(false) }}
+                />
+            </View>
+        )
+    }
 
     return (
         <View style={styles.container}>
             <Header style={styles.header} />
             <View style={styles.totalTab}>
-                <Totaltab label={'Total'} value={'5000'} onPress={() => { setModalVisible(true) }} />
+                <Totaltab label={'Total'} value={'5000'} onPress={() => { setPromptInsertVisible(true) }} />
             </View>
             <FlatList
                 style={styles.flatlist}
@@ -133,7 +148,7 @@ const Home: React.FC = () => {
             />
 
             <View style={styles.menu}>
-                <Menu onAddPress={() => { setModalVisible(true) }}
+                <Menu onAddPress={() => { setPromptInsertVisible(true) }}
                     onDebtPress={() => navigate('Debt')}
                     onExpensesPress={() => navigate('Expenses')}
                     onInvestimentsPress={() => navigate('Investiments')}
@@ -141,7 +156,8 @@ const Home: React.FC = () => {
                 />
             </View>
 
-            {_renderModal()}
+            {_renderPromptInsert()}
+            {_renderPromptEdit()}
         </View>
     );
 };

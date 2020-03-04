@@ -13,7 +13,7 @@ export interface Props {
     onPress: () => void,
 }
 
-function LottieRun() {
+function LottieMoney() {
     return (
         <View style={{ width: 150, height: 150, justifyContent: 'center', alignItems: 'center' }}>
             <Lottie resizeMode="cover" source={require('./../../../assets/json/money.json')} autoPlay loop />
@@ -33,9 +33,9 @@ const TotalTab: React.FC<Props> = (props) => {
                 </Text>
             </View>
             {Platform.OS !== 'web' ?
-                <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                <View style={{ justifyContent: 'center', alignItems: 'flex-end', position: 'absolute', right: -10, top: 0, bottom: 30 }}>
                     <TouchableOpacity onPress={props.onPress}>
-                        {LottieRun()}
+                        {LottieMoney()}
                     </TouchableOpacity>
                 </View>
                 :
@@ -62,14 +62,14 @@ const styles = StyleSheet.create({
         ...theme.shadow1,
     },
     label: {
-        fontSize: 15,
-        marginBottom: -10,
+        fontSize: verticalScale(10),
+        marginBottom: -7,
         marginLeft: 5,
         color: '#747474',
         fontFamily: theme.fonts.boldFont.fontFamily,
     },
     value: {
-        fontSize: 50,
+        fontSize: verticalScale(35),
         color: theme.colors.defaultGreenColor,
         fontFamily: theme.fonts.semiBoldFont.fontFamily,
 
