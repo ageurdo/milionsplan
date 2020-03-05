@@ -10,12 +10,13 @@ export interface Props {
     onExpensesPress?: () => void,
     onDebtPress?: () => void,
     onInvestimentsPress?: () => void,
+    defaultColor: string,
 };
 
 const Menu: React.FC<Props> = (props) => {
     let buttonStyle = !props.onAddPress ? [styles.plusButton, styles.buttonActive] : [styles.plusButton, styles.buttonNotActive]
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { backgroundColor: props.defaultColor },]}>
             <TouchableOpacity onPress={() => { props.onRevenuePress() }} style={styles.containerButton}>
                 <Feather name='image' color='#fff' size={35} />
             </TouchableOpacity>
@@ -44,7 +45,7 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         justifyContent: 'space-around',
-        backgroundColor: theme.colors.defaultGreenColor,
+
         paddingVertical: 25,
         borderTopStartRadius: 10,
         borderTopEndRadius: 10,

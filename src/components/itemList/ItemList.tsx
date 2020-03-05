@@ -10,9 +10,10 @@ export interface Item {
     id: string,
     description: string,
     dateTime: string,
-    bucks: number,
+    bucks: string,
     btnRemovePress?: () => void,
     btnEditPress?: () => void,
+    colorDefault?: string,
 
 };
 
@@ -20,21 +21,17 @@ const ItemList: React.FC<Item> = (props) => {
 
     function RightAction() {
         return (
-            <View style={styles.rightAction}>
-                <TouchableOpacity onPress={() => { props.btnRemovePress() }}>
-                    <Feather name="trash-2" size={28} color='#fff' />
-                </TouchableOpacity>
-            </View>
+            <TouchableOpacity style={styles.rightAction} onPress={() => { props.btnRemovePress() }}>
+                <Feather name="trash-2" size={28} color='#fff' />
+            </TouchableOpacity>
         );
     }
 
     function LeftAction() {
         return (
-            <View style={styles.leftAction}>
-                <TouchableOpacity onPress={() => { props.btnEditPress() }}>
-                    <Feather name="edit" size={28} color='#fff' />
-                </TouchableOpacity>
-            </View>
+            <TouchableOpacity style={styles.leftAction} onPress={() => { props.btnEditPress() }}>
+                <Feather name="edit" size={28} color='#fff' />
+            </TouchableOpacity>
         );
     }
 
@@ -44,7 +41,7 @@ const ItemList: React.FC<Item> = (props) => {
             renderLeftActions={LeftAction}
         >
             <TouchableOpacity style={styles.container}>
-                <View style={styles.containerIcon}>
+                <View style={[styles.containerIcon, { backgroundColor: props.colorDefault }]}>
                     <Feather name="dollar-sign" size={18} color='#fff' />
                 </View>
 
@@ -111,7 +108,6 @@ const styles = StyleSheet.create({
     containerIcon: {
         height: moderateScale(25),
         width: moderateScale(25),
-        backgroundColor: theme.colors.defaultGreenColor,
         borderRadius: 5,
         justifyContent: 'center',
         alignItems: 'center',
@@ -138,7 +134,7 @@ const styles = StyleSheet.create({
         marginRight: -10,
         borderTopLeftRadius: 10,
         borderBottomLeftRadius: 10,
-        backgroundColor: theme.colors.defaultGreenColor,
+        backgroundColor: theme.colors.defaultEditButtonColor,
         ...theme.shadow1,
     },
 });

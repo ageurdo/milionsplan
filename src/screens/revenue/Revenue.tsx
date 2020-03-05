@@ -15,25 +15,34 @@ import { TapGestureHandler, RotationGestureHandler, TouchableOpacity } from 'rea
 import PromptEdit from '../../components/prompt/edit/PromptEdit';
 import PromptInsert from '../../components/prompt/insert/PromptInsert';
 import { parse } from 'react-native-svg';
+import { access } from 'fs';
+import theme from '../../constants/theme';
 
-
+const defaultColor = theme.colors.defaultGreenColor;
 const Revenue: React.FC = () => {
 
     const { navigate } = useNavigation();
     const [promptInsertVisible, setPromptInsertVisible] = useState(false);
     const [promptEditVisible, setPromptEditVisible] = useState(false);
-    const [sum, setSum] = useState();
+    const [sum, setSum] = useState(0);
 
     const [revenues, setRevenues] = useState<Item[]>([]);
     const [teste, setTeste] = useState<Item>(null);
 
-    const STORAGE_KEY = 'revenue'
+    const STORAGE_KEY = 'Revenues'
 
     useEffect(
         () => {
             getData();
         },
         [promptInsertVisible, promptEditVisible]
+    );
+
+    useEffect(
+        () => {
+            _sum();
+        },
+        [revenues]
     );
 
     function _renderItem(revenue: Item, index) {
@@ -48,6 +57,7 @@ const Revenue: React.FC = () => {
                     setTeste(revenue);
                     setPromptEditVisible(true)
                 }}
+                colorDefault={defaultColor}
             />
         );
     }
@@ -63,20 +73,14 @@ const Revenue: React.FC = () => {
         finally {
             setPromptInsertVisible(false);
             setPromptEditVisible(false);
-            _sum();
         }
     };
 
     async function updateData(revenue: Item) {
 
-
         try {
-            // console.log(revenue, 'Item Revenue chegando')
-            // let index = revenues.indexOf(revenues.find((e) => e.id == revenue.id));
-            // revenues[index] = revenue;
 
             for (let index = 0; index < revenues.length; index++) {
-
 
                 if (revenues[index].id == revenue.id) {
                     //altera
@@ -122,7 +126,17 @@ const Revenue: React.FC = () => {
                 setRevenues([]);
             }
         }
+        finally {
+            _sum();
+        }
     };
+
+    function _sum() {
+        let sumCalc = revenues.reduce(function (total, currentValue) {
+            return total + parseFloat(currentValue.bucks.toString());
+        }, 0);
+        setSum(sumCalc);
+    }
 
     async function remove(id: string) {
         try {
@@ -159,7 +173,7 @@ const Revenue: React.FC = () => {
                     btnConfirmPress={updateData}
                     btnCancelPress={() => { setPromptEditVisible(false) }}
                     item={revenue}
-
+                    defaultColor={defaultColor}
                 />
             </View>
         )
@@ -174,35 +188,26 @@ const Revenue: React.FC = () => {
                     labelBtnCancel={'Fechar'}
                     btnConfirmPress={setData}
                     btnCancelPress={() => { setPromptInsertVisible(false) }}
+                    defaultColor={defaultColor}
                 />
             </View>
         )
     }
 
-    function _sum() {
-        let calc;
-        let bucks;
-        for (let index = 0; index < revenues.length; index++) {
-            if (revenues[index] !== null) {
-                bucks = (revenues[index].bucks);
-                calc = calc + parseFloat(bucks);
-                console.log(calc, 'calc aqui');
-                console.log(bucks, 'bucks aqui');
-                console.log(sum, 'soma aqui');
-            }
-            else
-                setSum(0);
-        }
-        setSum(calc);
-    }
-
     return (
         <View style={styles.container}>
-            <Header style={styles.header} />
+            <Header style={styles.header}
+                colorFrom={defaultColor}
+                colorTo={defaultColor}
+                colorIcon={defaultColor}
+            />
             <View style={styles.totalTab}>
                 <Totaltab label={'Total'}
-                    value={sum}
-                    onPress={() => { setPromptInsertVisible(true) }} />
+                    value={sum.toFixed(2)}
+                    titlePage={STORAGE_KEY}
+                    onPress={() => { setPromptInsertVisible(true) }}
+                    defaultColor={defaultColor}
+                />
             </View>
             <FlatList
                 style={styles.flatlist}
@@ -217,6 +222,7 @@ const Revenue: React.FC = () => {
                     onExpensesPress={() => navigate('Expenses')}
                     onInvestimentsPress={() => navigate('Investiments')}
                     onRevenuePress={() => navigate('Revenue')}
+                    defaultColor={defaultColor}
                 />
             </View>
 

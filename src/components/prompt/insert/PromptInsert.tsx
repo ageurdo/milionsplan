@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { Image, View, TouchableOpacity, Text, StyleSheet, TextInput, ImageBackground } from 'react-native';
+import { Image, View, TouchableOpacity, Text, StyleSheet, TextInput, ImageBackground, Platform } from 'react-native';
 import { verticalScale, scale } from 'react-native-size-matters';
 import theme from '../../../constants/theme';
 import { Item } from '../../itemList/ItemList'
+import { TextInputMask } from 'react-native-masked-text'
+
 
 export interface Props {
     label: string,
@@ -13,10 +15,11 @@ export interface Props {
     img?: string,
     inputDescription?: string,
     inputValue?: string,
+    defaultColor: string,
 }
 
 const PromptInsert: React.FC<Props> = (props) => {
-
+    const defaultColor = props.defaultColor;
     const [description, setDescription] = useState<string>('');
     const [BucksEntry, setBucksEntry] = useState<string>('');
 
@@ -30,7 +33,7 @@ const PromptInsert: React.FC<Props> = (props) => {
     return (
         <View style={styles.container}>
             <View style={styles.containerModal}>
-                <View style={styles.containerIcon}>
+                <View style={[styles.containerIcon, { backgroundColor: defaultColor }]}>
                     <Image
                         source={require('./../../../../assets/logo.png')}
                         style={styles.icon} />
@@ -45,12 +48,12 @@ const PromptInsert: React.FC<Props> = (props) => {
                         style={[styles.input]}
                         onChangeText={setDescription}
                         value={description} />
-                    <TextInput keyboardType={"numeric"}
+                    <TextInput
+                        keyboardType={"numeric"}
                         placeholder={'Valor'}
                         style={[styles.input]}
                         onChangeText={setBucksEntry}
                         value={BucksEntry} />
-
                 </View>
 
                 <View style={styles.containerButton}>
@@ -59,7 +62,7 @@ const PromptInsert: React.FC<Props> = (props) => {
                             {props.labelBtnCancel}
                         </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.buttonOk} onPress={() => {
+                    <TouchableOpacity style={[styles.buttonOk, { backgroundColor: defaultColor }]} onPress={() => {
                         props.btnConfirmPress(objeto);
                         setDescription('')
                     }}>
@@ -122,6 +125,7 @@ const styles = StyleSheet.create({
         borderWidth: 0.7,
         borderColor: 'grey',
         marginHorizontal: 5,
+        paddingHorizontal: 10,
         borderRadius: 5,
         fontSize: verticalScale(20),
         marginVertical: 5,
@@ -133,7 +137,6 @@ const styles = StyleSheet.create({
         height: verticalScale(80),
         marginTop: verticalScale(-40),
         borderRadius: verticalScale(40),
-        backgroundColor: theme.colors.defaultGreenColor,
         alignSelf: 'center',
         justifyContent: 'center',
         alignItems: 'center',
@@ -148,7 +151,6 @@ const styles = StyleSheet.create({
         height: verticalScale(50),
     },
     buttonOk: {
-        backgroundColor: theme.colors.defaultGreenColor,
         justifyContent: 'center',
         borderBottomRightRadius: 10,
     },

@@ -8,43 +8,48 @@ import { Feather } from '@expo/vector-icons';
 
 
 export interface Props {
+    titlePage: string,
     label: string,
-    value: number,
+    value: string,
     onPress: () => void,
+    defaultColor?: string,
 }
 
 function LottieMoney() {
     return (
         <View style={{ width: 150, height: 150, justifyContent: 'center', alignItems: 'center' }}>
-            <Lottie resizeMode="cover" source={require('./../../../assets/json/money.json')} autoPlay />
+            <Lottie resizeMode="cover" source={require('./../../../assets/json/money.json')} autoPlay loop={false} />
         </View>
     );
 }
 
 const TotalTab: React.FC<Props> = (props) => {
     return (
-        <View style={styles.container}>
-            <View style={{ flexDirection: 'column' }}>
-                <Text style={styles.label}>
-                    {props.label}
-                </Text>
-                <Text style={styles.value}>
-                    {props.value}
-                </Text>
+        <View>
+            <Text style={styles.titlePage}>{props.titlePage}</Text>
+            <View style={styles.container}>
+                <View style={{ flexDirection: 'column' }}>
+                    <Text style={styles.label}>
+                        {props.label}
+                    </Text>
+                    <Text style={[styles.value, { color: props.defaultColor }]}>
+                        {props.value}
+                    </Text>
+                </View>
+                {Platform.OS !== 'web' ?
+                    <View style={{ justifyContent: 'center', alignItems: 'flex-end', position: 'absolute', right: -10, top: 0, bottom: 30 }}>
+                        <TouchableOpacity onPress={props.onPress}>
+                            {LottieMoney()}
+                        </TouchableOpacity>
+                    </View>
+                    :
+                    <View style={[styles.containerPlusButton, { backgroundColor: props.defaultColor }]}>
+                        <TouchableOpacity onPress={props.onPress}>
+                            <Feather name="plus" style={styles.plusButton} />
+                        </TouchableOpacity>
+                    </View>
+                }
             </View>
-            {Platform.OS !== 'web' ?
-                <View style={{ justifyContent: 'center', alignItems: 'flex-end', position: 'absolute', right: -10, top: 0, bottom: 30 }}>
-                    <TouchableOpacity onPress={props.onPress}>
-                        {LottieMoney()}
-                    </TouchableOpacity>
-                </View>
-                :
-                <View style={styles.containerPlusButton}>
-                    <TouchableOpacity onPress={props.onPress}>
-                        <Feather name="plus" style={styles.plusButton} />
-                    </TouchableOpacity>
-                </View>
-            }
         </View>
     );
 }
@@ -61,6 +66,13 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         ...theme.shadow1,
     },
+    titlePage: {
+        fontSize: verticalScale(22),
+        marginLeft: 10,
+        marginBottom: 10,
+        fontFamily: theme.fonts.italic.fontFamily,
+        color: 'white',
+    },
     label: {
         fontSize: verticalScale(10),
         marginBottom: -7,
@@ -70,15 +82,12 @@ const styles = StyleSheet.create({
     },
     value: {
         fontSize: verticalScale(35),
-        color: theme.colors.defaultGreenColor,
         fontFamily: theme.fonts.semiBoldFont.fontFamily,
-
     },
     containerPlusButton: {
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
-        backgroundColor: theme.colors.defaultGreenColor,
         borderRadius: verticalScale(25),
         width: verticalScale(50),
         height: verticalScale(50),

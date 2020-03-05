@@ -28,6 +28,9 @@ export default {
         default: {
             fontFamily: "OpenSans-Regular",
         },
+        italic: {
+            fontFamily: "OpenSans-Italic",
+        },
         boldFont: {
             fontFamily: "OpenSans-Bold",
         },
@@ -43,7 +46,11 @@ export default {
         defaultDarkTextColor: '#484848',
         defaultSecundaryTextColor: '#7E7E7E',
         defaultGreenColor: '#1CD274',
+        defaultOrangeColor: '#FF7A06',
+        defaultPurpleColor: '#B060FF',
         defaultBgColor: '#C3c3c3',
         defaultDisableColor: "#D4D4D4",
+        defaultRedColor: "#FF6464",
+        defaultEditButtonColor: '#59C6FE',
     },
 }

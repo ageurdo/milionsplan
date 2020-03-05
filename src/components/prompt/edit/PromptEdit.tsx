@@ -12,10 +12,12 @@ export interface Props {
     btnCancelPress: () => void,
     img?: string,
     item?: Item,
+    defaultColor: string,
 }
 
 const PromptEdit: React.FC<Props> = (props) => {
 
+    const defaultColor = props.defaultColor;
     const [description, setDescription] = useState<string>(props.item.description);
     const [BucksEntry, setBucksEntry] = useState<string>(props.item.bucks);
 
@@ -29,7 +31,7 @@ const PromptEdit: React.FC<Props> = (props) => {
     return (
         <View style={styles.container}>
             <View style={styles.containerModal}>
-                <View style={styles.containerIcon}>
+                <View style={[styles.containerIcon, { backgroundColor: defaultColor }]}>
                     <Image
                         source={require('./../../../../assets/logo.png')}
                         style={styles.icon} />
@@ -49,7 +51,6 @@ const PromptEdit: React.FC<Props> = (props) => {
                         style={[styles.input]}
                         onChangeText={setBucksEntry}
                         value={BucksEntry} />
-
                 </View>
 
                 <View style={styles.containerButton}>
@@ -58,7 +59,7 @@ const PromptEdit: React.FC<Props> = (props) => {
                             {props.labelBtnCancel}
                         </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.buttonOk} onPress={() => {
+                    <TouchableOpacity style={[styles.buttonOk, { backgroundColor: defaultColor }]} onPress={() => {
                         props.btnConfirmPress(object);
                         setDescription('')
                     }}>
@@ -82,7 +83,6 @@ const styles = StyleSheet.create({
     },
     containerModal: {
         width: verticalScale(300),
-        height: verticalScale(230),
         backgroundColor: 'white',
         position: "absolute",
         borderRadius: 10,
@@ -121,10 +121,12 @@ const styles = StyleSheet.create({
         borderWidth: 0.7,
         borderColor: 'grey',
         marginHorizontal: 5,
+        paddingHorizontal: 10,
         borderRadius: 5,
         fontSize: verticalScale(20),
         marginVertical: 5,
         height: verticalScale(30),
+
     },
 
     containerIcon: {
@@ -132,7 +134,6 @@ const styles = StyleSheet.create({
         height: verticalScale(80),
         marginTop: verticalScale(-40),
         borderRadius: verticalScale(40),
-        backgroundColor: theme.colors.defaultGreenColor,
         alignSelf: 'center',
         justifyContent: 'center',
         alignItems: 'center',
@@ -147,7 +148,6 @@ const styles = StyleSheet.create({
         height: verticalScale(50),
     },
     buttonOk: {
-        backgroundColor: theme.colors.defaultGreenColor,
         justifyContent: 'center',
         borderBottomRightRadius: 10,
     },
