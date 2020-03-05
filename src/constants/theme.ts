@@ -9,7 +9,7 @@ export default {
     windowHeight: height,
 
     shadow1: {
-        elevation: 3,
+        elevation: 2,
         shadowOffset: { width: 1, height: 2 },
         shadowColor: "#8D8D8D",
         shadowOpacity: 0.5,

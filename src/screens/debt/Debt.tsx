@@ -244,7 +244,7 @@ const styles = StyleSheet.create({
         zIndex: 5,
     },
     totalTab: {
-        marginTop: verticalScale(-40),
+        marginTop: verticalScale(-60),
         // zIndex: 5,
     },
     flatlist: {
