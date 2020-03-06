@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { fetchFonts } from './../../services/font-service';
 // import AccountStore from '../../stores/account-store';
 import { loadAsync } from 'expo-font';
-import Home from '../revenue/Revenue';
+import Dashboard from '../dashboard/Dashboard';
 
 export default function Splash() {
 
@@ -23,7 +23,7 @@ export default function Splash() {
             // const isAuthenticated = await AccountStore.isAuthenticated();
 
             // if (isAuthenticated) {
-            navigate('Revenue');
+            navigate('Dashboard');
             // } else {
             //     navigate("Login");
             // }

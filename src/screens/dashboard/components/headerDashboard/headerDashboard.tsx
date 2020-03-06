@@ -2,9 +2,8 @@ import React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { LinearGradient } from 'expo-linear-gradient';
-import { moderateScale } from 'react-native-size-matters';
+import { moderateScale, verticalScale } from 'react-native-size-matters';
 import Svg, { Circle, Ellipse, G, Text, TSpan, TextPath, Path, Polygon, Polyline, Line, Rect, Use, Symbol, Defs, RadialGradient, Stop, ClipPath, Pattern, Mask } from 'react-native-svg';
-
 
 export interface Props {
     title?: string;
@@ -15,15 +14,11 @@ export interface Props {
     colorIcon: string,
 }
 
-const Header: React.FC<Props> = (props) => {
+const HeaderDashboard: React.FC<Props> = (props) => {
 
     function IconMenu() {
         return (
-            <Svg
-                // xmlns="http://www.w3.org/2000/svg"
-                width="32"
-                height="35"
-                viewBox="0 0 25 25">
+            <Svg width="32" height="35" viewBox="0 0 25 25">
                 <G id="Grupo_1421" data-name="Grupo 1421" transform="translate(-14 -15)">
                     <G id="Grupo_1420" data-name="Grupo 1420">
                         <G id="Grupo_1419" data-name="Grupo 1419">
@@ -77,15 +72,6 @@ const Header: React.FC<Props> = (props) => {
         );
     }
 
-
-    function handleProfile() {
-
-    }
-
-    function handleMenu() {
-
-    }
-
     return (
         <View>
             <LinearGradient
@@ -94,50 +80,46 @@ const Header: React.FC<Props> = (props) => {
                 end={[1, 1]}
                 locations={[0.25, 0.4, 1]}>
 
-                <View style={[styles.container, props.style]}>
+                <View style={styles.container}>
 
-                    <TouchableOpacity onPress={handleMenu}>
+                    <TouchableOpacity onPress={() => { }}>
                         <View style={{ alignContent: 'center', width: moderateScale(40) }}>
                             {IconMenu()}
                         </View>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={[styles.containerProfile, { width: moderateScale(40) }]} onPress={handleProfile}>
-                        <Image source={require('./../../../assets/profile.png')} style={styles.profile} />
+                    <TouchableOpacity style={[styles.containerProfile, { width: moderateScale(40) }]} onPress={() => { }}>
+                        <Image source={require('./../../../../../assets/profile.png')} style={styles.profile} />
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.containerLogo} >
                         <View style={{ width: moderateScale(40) }}>
-                            {/* {Logo()} */}
+                            {Logo()}
                         </View>
                     </TouchableOpacity>
 
                 </View>
-            </LinearGradient>
+            </LinearGradient >
         </View >
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-        paddingLeft: moderateScale(20),
-        paddingRight: moderateScale(20),
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
         width: '100%',
         height: moderateScale(150),
+        flexDirection: 'row',
+        paddingHorizontal: moderateScale(20),
+        justifyContent: 'space-between',
+        alignItems: 'center',
     },
-
     containerLogo: {
         justifyContent: 'center',
     },
-
     containerProfile: {
         width: moderateScale(40),
         height: moderateScale(40),
     },
-
     profile: {
         width: moderateScale(40),
         height: moderateScale(40),
@@ -146,4 +128,4 @@ const styles = StyleSheet.create({
 }
 );
 
-export default Header;
+export default HeaderDashboard;

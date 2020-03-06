@@ -51,6 +51,7 @@ export default {
         defaultBgColor: '#C3c3c3',
         defaultDisableColor: "#D4D4D4",
         defaultRedColor: "#FF6464",
+        defaultDashboardColor: "#616EF0",
         defaultEditButtonColor: '#59C6FE',
     },
 }

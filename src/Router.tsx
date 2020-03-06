@@ -8,6 +8,7 @@ import Debt from './screens/debt/Debt';
 import Expenses from './screens/expenses/Expenses';
 import Investiments from './screens/investiments/Investiments';
 import Revenue from './screens/revenue/Revenue';
+import Dashboard from './screens/dashboard/Dashboard';
 
 const Stack = createStackNavigator();
 
@@ -23,6 +24,11 @@ const Router = () => {
                         gestureEnabled: false,
                         gestureDirection: "horizontal"
                     }}
+                />
+                <Stack.Screen
+                    name="Dashboard"
+                    component={Dashboard}
+                    options={{ headerShown: false, gestureEnabled: false }}
                 />
                 <Stack.Screen
                     name="Revenue"
