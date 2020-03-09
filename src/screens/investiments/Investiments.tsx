@@ -1,24 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, ImageEditor } from 'react-native';
+import { View, StyleSheet, FlatList } from 'react-native';
 import Header from '../../components/header/Header';
 import ItemList, { Item } from '../../components/itemList/ItemList';
 import Totaltab from '../../components/totalTab/TotalTab';
 import Menu from '../../components/menu/Menu';
 import { verticalScale } from 'react-native-size-matters';
-import Prompt from '../../components/prompt/insert/PromptInsert';
 import { useNavigation } from '@react-navigation/native';
-import Debt from '../debt/Debt';
-import Revenue from '../revenue/Revenue';
-import investiments from '../investiments/Investiments';
 import { AsyncStorage } from 'react-native';
-import { TapGestureHandler, RotationGestureHandler, TouchableOpacity } from 'react-native-gesture-handler';
 import PromptEdit from '../../components/prompt/edit/PromptEdit';
 import PromptInsert from '../../components/prompt/insert/PromptInsert';
-import { parse } from 'react-native-svg';
-import { access } from 'fs';
 import theme from '../../constants/theme';
 
 const defaultColor = theme.colors.defaultPurpleColor;
+const secondColor = theme.colors.secondPurpleColor;
 const Investiments: React.FC = () => {
 
     const { navigate } = useNavigation();
@@ -45,7 +39,7 @@ const Investiments: React.FC = () => {
         [revenues]
     );
 
-    function _renderItem(revenue: Item, index) {
+    function _renderItem(revenue: Item) {
         return (
             < ItemList
                 id={revenue.id}
@@ -198,7 +192,7 @@ const Investiments: React.FC = () => {
         <View style={styles.container}>
             <Header style={styles.header}
                 colorFrom={defaultColor}
-                colorTo={defaultColor}
+                colorTo={secondColor}
                 colorIcon={defaultColor}
             />
             <View style={styles.totalTab}>
@@ -212,12 +206,12 @@ const Investiments: React.FC = () => {
             <FlatList
                 style={styles.flatlist}
                 data={revenues}
-                renderItem={({ item, index }) => _renderItem(item, index)}
+                renderItem={({ item, index }) => _renderItem(item)}
                 keyExtractor={item => item.id}
             />
 
             <View style={styles.menu}>
-                <Menu onAddPress={() => { setPromptInsertVisible(true) }}
+                <Menu onAddPress={() => navigate('Dashboard')}
                     onDebtPress={() => navigate('Debt')}
                     onExpensesPress={() => navigate('Expenses')}
                     onInvestimentsPress={() => navigate('Investiments')}

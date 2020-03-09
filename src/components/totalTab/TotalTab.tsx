@@ -15,14 +15,6 @@ export interface Props {
     defaultColor?: string,
 }
 
-function LottieMoney() {
-    return (
-        <View style={{ width: 150, height: 150, justifyContent: 'center', alignItems: 'center' }}>
-            <Lottie resizeMode="cover" source={require('./../../../assets/json/money.json')} autoPlay loop={false} />
-        </View>
-    );
-}
-
 const TotalTab: React.FC<Props> = (props) => {
     return (
         <View>
@@ -37,9 +29,9 @@ const TotalTab: React.FC<Props> = (props) => {
                     </Text>
                 </View>
                 {Platform.OS !== 'web' ?
-                    <View style={{ justifyContent: 'center', alignItems: 'flex-end', position: 'absolute', right: -10, top: 0, bottom: 30 }}>
+                    <View style={styles.containerLottie}>
                         <TouchableOpacity onPress={props.onPress}>
-                            {LottieMoney()}
+                            <Lottie resizeMode="contain" style={styles.lottie} source={require('./../../../assets/json/plus.json')} autoPlay loop={false} />
                         </TouchableOpacity>
                     </View>
                     :
@@ -96,6 +88,20 @@ const styles = StyleSheet.create({
     plusButton: {
         fontSize: 50,
         color: '#fff',
+
+    },
+
+    containerLottie: {
+
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
+    lottie: {
+        width: verticalScale(50),
+        height: verticalScale(50),
+        justifyContent: 'center',
+        alignItems: 'center',
 
     },
 });

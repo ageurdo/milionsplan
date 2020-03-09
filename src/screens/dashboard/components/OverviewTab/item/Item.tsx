@@ -48,14 +48,13 @@ const styles = StyleSheet.create({
     },
     containerItem: {
         alignItems: 'flex-end',
-        paddingRight: 30,
         paddingVertical: 10,
     },
     labelItem: {
         fontSize: verticalScale(10),
         fontFamily: theme.fonts.italic.fontFamily,
         color: 'grey',
-        marginBottom: Platform.OS == 'web' ? -10 : -8,
+        marginBottom: Platform.OS == 'web' ? -5 : -8,
     },
     valueItem: {
         fontSize: verticalScale(20),

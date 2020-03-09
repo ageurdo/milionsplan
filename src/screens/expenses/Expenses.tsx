@@ -17,8 +17,10 @@ import PromptInsert from '../../components/prompt/insert/PromptInsert';
 import { parse } from 'react-native-svg';
 import { access } from 'fs';
 import theme from '../../constants/theme';
+import Dashboard from '../../screens/dashboard/Dashboard';
 
 const defaultColor = theme.colors.defaultOrangeColor;
+const secondColor = theme.colors.secondOrangeColor;
 const Expenses: React.FC = () => {
 
     const { navigate } = useNavigation();
@@ -27,7 +29,7 @@ const Expenses: React.FC = () => {
     const [sum, setSum] = useState(0);
 
     const [revenues, setRevenues] = useState<Item[]>([]);
-    const [teste, setTeste] = useState<Item>(null);
+    const [backup, setBackup] = useState<Item>(null);
 
     const STORAGE_KEY = 'Expenses';
 
@@ -54,7 +56,7 @@ const Expenses: React.FC = () => {
                 bucks={revenue.bucks}
                 btnRemovePress={() => { remove(revenue.id) }}
                 btnEditPress={() => {
-                    setTeste(revenue);
+                    setBackup(revenue);
                     setPromptEditVisible(true)
                 }}
                 colorDefault={defaultColor}
@@ -198,7 +200,7 @@ const Expenses: React.FC = () => {
         <View style={styles.container}>
             <Header style={styles.header}
                 colorFrom={defaultColor}
-                colorTo={defaultColor}
+                colorTo={secondColor}
                 colorIcon={defaultColor}
             />
             <View style={styles.totalTab}>
@@ -217,7 +219,7 @@ const Expenses: React.FC = () => {
             />
 
             <View style={styles.menu}>
-                <Menu onAddPress={() => { setPromptInsertVisible(true) }}
+                <Menu onAddPress={() => navigate('Dashboard')}
                     onDebtPress={() => navigate('Debt')}
                     onExpensesPress={() => navigate('Expenses')}
                     onInvestimentsPress={() => navigate('Investiments')}
@@ -230,7 +232,7 @@ const Expenses: React.FC = () => {
 
             {
                 promptEditVisible &&
-                _renderPromptEdit(teste)
+                _renderPromptEdit(backup)
             }
         </View>
     );

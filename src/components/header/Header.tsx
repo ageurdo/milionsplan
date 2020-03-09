@@ -92,7 +92,8 @@ const Header: React.FC<Props> = (props) => {
                 colors={[props.colorFrom, props.colorTo]}
                 start={[0, 0]}
                 end={[1, 1]}
-                locations={[0.25, 0.4, 1]}>
+                locations={[0.25, 0.75]}
+            >
 
                 <View style={[styles.container, props.style]}>
 

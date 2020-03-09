@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { verticalScale } from 'react-native-size-matters';
+import { verticalScale, moderateScale } from 'react-native-size-matters';
 import theme from './../../constants/theme'
 
 export interface Props {
@@ -18,24 +18,24 @@ const Menu: React.FC<Props> = (props) => {
     return (
         <View style={[styles.container, { backgroundColor: props.defaultColor },]}>
             <TouchableOpacity onPress={() => { props.onRevenuePress() }} style={styles.containerButton}>
-                <Feather name='image' color='#fff' size={35} />
+                <Feather name='image' color='#fff' size={moderateScale(25)} />
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => { props.onExpensesPress() }} style={styles.containerButton}>
-                <Feather name='inbox' color='#fff' size={35} />
+                <Feather name='inbox' color='#fff' size={moderateScale(25)} />
             </TouchableOpacity>
 
             <View style={styles.containerPlusButton}>
                 <TouchableOpacity onPress={() => { props.onAddPress() }}>
-                    <Feather name="plus" style={buttonStyle} />
+                    <Feather name="home" style={buttonStyle} />
                 </TouchableOpacity>
             </View>
             <TouchableOpacity onPress={() => { props.onDebtPress() }} style={styles.containerButton}>
-                <Feather name='layers' color='#fff' size={35} />
+                <Feather name='layers' color='#fff' size={moderateScale(25)} />
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => { props.onInvestimentsPress() }} style={styles.containerButton}>
-                <Feather name='lock' color='#fff' size={35} />
+                <Feather name='lock' color='#fff' size={verticalScale(25)} />
             </TouchableOpacity>
         </View>
     );
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
         height: verticalScale(50),
     },
     plusButton: {
-        fontSize: 50,
+        fontSize: 40,
         color: '#fff',
 
     },
