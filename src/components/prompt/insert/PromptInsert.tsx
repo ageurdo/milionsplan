@@ -4,7 +4,7 @@ import { verticalScale, scale } from 'react-native-size-matters';
 import theme from '../../../constants/theme';
 import { Item } from '../../itemList/ItemList'
 import { TextInputMask } from 'react-native-masked-text'
-
+import moment from "moment";
 
 export interface Props {
     label: string,
@@ -24,11 +24,12 @@ const PromptInsert: React.FC<Props> = (props) => {
     const [BucksEntry, setBucksEntry] = useState<string>('');
 
 
-    const objeto: Item = {
+    const object: Item = {
         id: new Date().toString(),
         description: description,
         bucks: BucksEntry,
-        dateTime: new Date().toString(),
+        // dateTime: new Date().toString(),
+        dateTime: moment().format("YYYY-MM-DD HH:mm")
     }
     return (
         <View style={styles.container}>
@@ -63,7 +64,7 @@ const PromptInsert: React.FC<Props> = (props) => {
                         </Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={[styles.buttonOk, { backgroundColor: defaultColor }]} onPress={() => {
-                        props.btnConfirmPress(objeto);
+                        props.btnConfirmPress(object);
                         setDescription('')
                     }}>
                         <Text style={styles.buttonTextOk}>

@@ -60,6 +60,7 @@ const Expenses: React.FC = () => {
                     setPromptEditVisible(true)
                 }}
                 colorDefault={defaultColor}
+                isSwipeable={true}
             />
         );
     }

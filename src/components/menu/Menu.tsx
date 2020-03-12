@@ -70,8 +70,8 @@ const styles = StyleSheet.create({
     plusButton: {
         fontSize: 40,
         color: '#fff',
-
     },
+
     buttonActive: {
         backgroundColor: 'rgba(255, 255, 255, 1)',
         color: '#fff',

@@ -53,6 +53,7 @@ const Debt: React.FC = () => {
                     setPromptEditVisible(true)
                 }}
                 colorDefault={defaultColor}
+                isSwipeable={true}
             />
         );
     }

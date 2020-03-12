@@ -53,6 +53,7 @@ const Revenue: React.FC = () => {
                     setPromptEditVisible(true)
                 }}
                 colorDefault={defaultColor}
+                isSwipeable={true}
             />
         );
     }

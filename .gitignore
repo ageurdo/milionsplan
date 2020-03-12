@@ -9,6 +9,5 @@ npm-debug.*
 *.orig.*
 web-build/
 web-report/
-adobe-xd/
 # macOS
 .DS_Store

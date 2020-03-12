@@ -6,6 +6,8 @@ import theme from '../../constants/theme';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { platform } from 'os';
 
+
+
 export interface Item {
     id: string,
     description: string,
@@ -14,7 +16,7 @@ export interface Item {
     btnRemovePress?: () => void,
     btnEditPress?: () => void,
     colorDefault?: string,
-
+    isSwipeable: boolean,
 };
 
 const ItemList: React.FC<Item> = (props) => {
@@ -36,10 +38,28 @@ const ItemList: React.FC<Item> = (props) => {
     }
 
     return (
-        <Swipeable
-            renderRightActions={RightAction}
-            renderLeftActions={LeftAction}
-        >
+
+        props.isSwipeable ?
+
+            <Swipeable renderRightActions={RightAction} renderLeftActions={LeftAction}>
+                <TouchableOpacity style={styles.container}>
+                    <View style={[styles.containerIcon, { backgroundColor: props.colorDefault }]}>
+                        <Feather name="dollar-sign" size={18} color='#fff' />
+                    </View>
+
+                    <View>
+                        <Text style={styles.title}>{props.description}</Text>
+                        <Text style={styles.dateTime}>{props.dateTime}</Text>
+                    </View>
+
+                    <View style={styles.containerBucks}>
+                        <Text style={styles.bucks}>{props.bucks}</Text>
+                    </View>
+                </TouchableOpacity >
+            </Swipeable>
+
+            :
+
             <TouchableOpacity style={styles.container}>
                 <View style={[styles.containerIcon, { backgroundColor: props.colorDefault }]}>
                     <Feather name="dollar-sign" size={18} color='#fff' />
@@ -54,7 +74,6 @@ const ItemList: React.FC<Item> = (props) => {
                     <Text style={styles.bucks}>{props.bucks}</Text>
                 </View>
             </TouchableOpacity >
-        </Swipeable>
     );
 
 }
