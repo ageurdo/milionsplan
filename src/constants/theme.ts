@@ -8,8 +8,16 @@ export default {
     windowWidth: width,
     windowHeight: height,
 
-    shadow: {
-        elevation: 4,
+    shadow1: {
+        elevation: 2,
+        shadowOffset: { width: 1, height: 2 },
+        shadowColor: "#8D8D8D",
+        shadowOpacity: 0.5,
+        shadowRadius: 10,
+    },
+
+    shadow10: {
+        elevation: 10,
         shadowOffset: { width: 1, height: 2 },
         shadowColor: "#8D8D8D",
         shadowOpacity: 0.5,
@@ -19,6 +27,9 @@ export default {
     fonts: {
         default: {
             fontFamily: "OpenSans-Regular",
+        },
+        italic: {
+            fontFamily: "OpenSans-Italic",
         },
         boldFont: {
             fontFamily: "OpenSans-Bold",
@@ -34,8 +45,17 @@ export default {
     colors: {
         defaultDarkTextColor: '#484848',
         defaultSecundaryTextColor: '#7E7E7E',
-        defaultGreenColor: '#1CD274',
         defaultBgColor: '#C3c3c3',
         defaultDisableColor: "#D4D4D4",
+        defaultDashboardColor: "#616EF0",
+        defaultEditButtonColor: '#59C6FE',
+        defaultRedColor: "#FF6464",
+        defaultGreenColor: '#1CD274',
+        defaultOrangeColor: '#FF7A06',
+        defaultPurpleColor: '#B060FF',
+        secondRedColor: "#FE3F3F",
+        secondGreenColor: '#00D266',
+        secondOrangeColor: '#F68C00',
+        secondPurpleColor: '#9737F6',
     },
 }

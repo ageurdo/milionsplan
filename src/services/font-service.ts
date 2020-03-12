@@ -5,7 +5,7 @@ const fetchFonts = () => {
     return Font.loadAsync({
         'OpenSans-Bold': require('./../../assets/fonts/OpenSans-Bold.ttf'),
         'OpenSans-BoldItalic': require('./../../assets/fonts/OpenSans-BoldItalic.ttf'),
-        'OpenSans-ExtraBold': require('./../../assets/fonts/ExtraBold'),
+        'OpenSans-ExtraBold': require('./../../assets/fonts/OpenSans-ExtraBold.ttf'),
         'OpenSans-ExtraBoldItalic': require('./../../assets/fonts/OpenSans-ExtraBoldItalic.ttf'),
         'OpenSans-Italic': require('./../../assets/fonts/OpenSans-Italic.ttf'),
         'OpenSans-Light': require('./../../assets/fonts/OpenSans-Light.ttf'),

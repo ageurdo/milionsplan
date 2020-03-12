@@ -30,7 +30,7 @@ function IconMenu() {
                 data-name="Grupo 1416"
                 transform="translate(2 -.524)"
               >
-                <g id="Grupo_1417" fill={theme.colors.defaultGreenColor} data-name="Grupo 1417">
+                <g id="Grupo_1417" fill={colorDefault} data-name="Grupo 1417">
                   <path
                     id="Caminho_13"
                     d="M11.021 1.638H.464C.209 1.638 0 1.27 0 .819S.209 0 .464 0h10.557c.256 0 .464.368.464.819s-.208.819-.464.819z"

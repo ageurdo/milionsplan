@@ -1,35 +1,79 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Platform } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { moderateScale } from 'react-native-size-matters';
+import { moderateScale, verticalScale } from 'react-native-size-matters';
 import theme from '../../constants/theme';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
+import { platform } from 'os';
+
+
 
 export interface Item {
     id: string,
-    title: string,
+    description: string,
     dateTime: string,
     bucks: string,
-
+    btnRemovePress?: () => void,
+    btnEditPress?: () => void,
+    colorDefault?: string,
+    isSwipeable: boolean,
 };
 
 const ItemList: React.FC<Item> = (props) => {
+
+    function RightAction() {
+        return (
+            <TouchableOpacity style={styles.rightAction} onPress={() => { props.btnRemovePress() }}>
+                <Feather name="trash-2" size={28} color='#fff' />
+            </TouchableOpacity>
+        );
+    }
+
+    function LeftAction() {
+        return (
+            <TouchableOpacity style={styles.leftAction} onPress={() => { props.btnEditPress() }}>
+                <Feather name="edit" size={28} color='#fff' />
+            </TouchableOpacity>
+        );
+    }
+
     return (
-        <TouchableOpacity style={styles.container}>
 
-            <View style={styles.containerIcon}>
-                <Feather name="dollar-sign" size={18} color='#fff' />
-            </View>
+        props.isSwipeable ?
 
-            <View>
-                <Text style={styles.title}>{props.title}</Text>
-                <Text style={styles.dateTime}>{props.dateTime}</Text>
-            </View>
+            <Swipeable renderRightActions={RightAction} renderLeftActions={LeftAction}>
+                <TouchableOpacity style={styles.container}>
+                    <View style={[styles.containerIcon, { backgroundColor: props.colorDefault }]}>
+                        <Feather name="dollar-sign" size={18} color='#fff' />
+                    </View>
 
-            <View style={styles.containerBucks}>
-                <Text style={styles.bucks}>{props.bucks}</Text>
-            </View>
+                    <View>
+                        <Text style={styles.title}>{props.description}</Text>
+                        <Text style={styles.dateTime}>{props.dateTime}</Text>
+                    </View>
 
-        </TouchableOpacity >
+                    <View style={styles.containerBucks}>
+                        <Text style={styles.bucks}>{props.bucks}</Text>
+                    </View>
+                </TouchableOpacity >
+            </Swipeable>
+
+            :
+
+            <TouchableOpacity style={styles.container}>
+                <View style={[styles.containerIcon, { backgroundColor: props.colorDefault }]}>
+                    <Feather name="dollar-sign" size={18} color='#fff' />
+                </View>
+
+                <View>
+                    <Text style={styles.title}>{props.description}</Text>
+                    <Text style={styles.dateTime}>{props.dateTime}</Text>
+                </View>
+
+                <View style={styles.containerBucks}>
+                    <Text style={styles.bucks}>{props.bucks}</Text>
+                </View>
+            </TouchableOpacity >
     );
 
 }
@@ -51,18 +95,21 @@ const styles = StyleSheet.create({
         borderRadius: 10,
 
         backgroundColor: '#fff',
-        ...theme.shadow,
+        ...theme.shadow1,
+
     },
 
     title: {
         fontSize: 18,
         fontWeight: '500',
-        color: '#747474'
+        color: '#747474',
+        fontFamily: theme.fonts.boldFont.fontFamily,
     },
 
     dateTime: {
         fontSize: 11,
-        color: '#A2A2A2'
+        color: '#A2A2A2',
+        fontFamily: theme.fonts.default.fontFamily,
     },
 
     containerBucks: {
@@ -70,21 +117,44 @@ const styles = StyleSheet.create({
     },
 
     bucks: {
+        paddingRight: 15,
         fontSize: 20,
         textAlign: 'right',
-        fontWeight: '700',
-        color: '#747474'
-
+        color: '#747474',
+        fontFamily: theme.fonts.boldFont.fontFamily,
     },
 
     containerIcon: {
         height: moderateScale(25),
         width: moderateScale(25),
-        backgroundColor: theme.colors.defaultGreenColor,
         borderRadius: 5,
         justifyContent: 'center',
         alignItems: 'center',
         marginRight: 20,
+    },
+    rightAction: {
+        width: verticalScale(50),
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginVertical: 5,
+        left: Platform.OS == 'web' ? -20 : 20,
+        marginRight: -10,
+        borderTopRightRadius: 10,
+        borderBottomRightRadius: 10,
+        backgroundColor: '#FF6060',
+        ...theme.shadow1,
+    },
+    leftAction: {
+        width: verticalScale(50),
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginVertical: 5,
+        left: Platform.OS == 'web' ? 10 : 10,
+        marginRight: -10,
+        borderTopLeftRadius: 10,
+        borderBottomLeftRadius: 10,
+        backgroundColor: theme.colors.defaultEditButtonColor,
+        ...theme.shadow1,
     },
 });
 
