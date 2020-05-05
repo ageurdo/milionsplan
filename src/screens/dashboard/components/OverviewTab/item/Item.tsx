@@ -29,7 +29,7 @@ const ItemOverviewTab: React.FC<Props> = (props) => {
     //#endregion
 
     return (
-        <View style={styles.container}>
+        <View style={styles.containerItemOverviewTab}>
             <View style={styles.containerItem}>
                 <Text style={styles.labelItem}>{props.label}</Text>
                 <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
@@ -43,7 +43,7 @@ const ItemOverviewTab: React.FC<Props> = (props) => {
 }
 
 const styles = StyleSheet.create({
-    container: {
+    containerItemOverviewTab: {
         flex: 1,
     },
     containerItem: {

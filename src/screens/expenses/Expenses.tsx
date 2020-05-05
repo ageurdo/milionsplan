@@ -1,23 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, ImageEditor } from 'react-native';
+import { View, StyleSheet, FlatList } from 'react-native';
 import Header from '../../components/header/Header';
 import ItemList, { Item } from '../../components/itemList/ItemList';
 import Totaltab from '../../components/totalTab/TotalTab';
-import Menu from '../../components/menu/Menu';
+import FooterMenu from '../../components/menu/FooterMenu';
 import { verticalScale } from 'react-native-size-matters';
-import Prompt from '../../components/prompt/insert/PromptInsert';
 import { useNavigation } from '@react-navigation/native';
-import Debt from '../debt/Debt';
-import Revenue from '../revenue/Revenue';
-import investiments from '../investiments/Investiments';
 import { AsyncStorage } from 'react-native';
-import { TapGestureHandler, RotationGestureHandler, TouchableOpacity } from 'react-native-gesture-handler';
 import PromptEdit from '../../components/prompt/edit/PromptEdit';
 import PromptInsert from '../../components/prompt/insert/PromptInsert';
-import { parse } from 'react-native-svg';
-import { access } from 'fs';
 import theme from '../../constants/theme';
-import Dashboard from '../../screens/dashboard/Dashboard';
 
 const defaultColor = theme.colors.defaultOrangeColor;
 const secondColor = theme.colors.secondOrangeColor;
@@ -28,10 +20,11 @@ const Expenses: React.FC = () => {
     const [promptEditVisible, setPromptEditVisible] = useState(false);
     const [sum, setSum] = useState(0);
 
-    const [revenues, setRevenues] = useState<Item[]>([]);
+    const [expenses, setExpenses] = useState<Item[]>([]);
     const [backup, setBackup] = useState<Item>(null);
 
     const STORAGE_KEY = 'Expenses';
+    const STORAGE_KEY_SUM = 'Expenses_Sum';
 
     useEffect(
         () => {
@@ -44,10 +37,10 @@ const Expenses: React.FC = () => {
         () => {
             _sum();
         },
-        [revenues]
+        [expenses]
     );
 
-    function _renderItem(revenue: Item, index) {
+    function _renderItem(revenue: Item) {
         return (
             < ItemList
                 id={revenue.id}
@@ -65,9 +58,9 @@ const Expenses: React.FC = () => {
         );
     }
 
-    async function setData(revenue: Item) {
+    async function setData(expense: Item) {
         try {
-            let newRevenues = [...revenues, revenue];
+            let newRevenues = [...expenses, expense];
             AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newRevenues));
         } catch (error) {
             // Error saving data
@@ -83,20 +76,20 @@ const Expenses: React.FC = () => {
 
         try {
 
-            for (let index = 0; index < revenues.length; index++) {
+            for (let index = 0; index < expenses.length; index++) {
 
-                if (revenues[index].id == revenue.id) {
+                if (expenses[index].id == revenue.id) {
                     //altera
-                    revenues[index] = revenue;
-                    console.log(revenues[index], 'alterado');
+                    expenses[index] = revenue;
+                    console.log(expenses[index], 'alterado');
 
-                    setRevenues(revenues);
-                    console.log(revenues, 'Lista alterada');
+                    setExpenses(expenses);
+                    console.log(expenses, 'Lista alterada');
                     break;
                 }
             }
 
-            AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(revenues));
+            AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(expenses));
 
 
 
@@ -119,14 +112,14 @@ const Expenses: React.FC = () => {
                         // We have data!!
                         newRevenue = JSON.parse(response);
                     }
-                    setRevenues(newRevenue);
+                    setExpenses(newRevenue);
                 });
 
         } catch (error) {
             // Error retrieving data
             (response) => {
                 console.error(response)
-                setRevenues([]);
+                setExpenses([]);
             }
         }
         finally {
@@ -135,10 +128,17 @@ const Expenses: React.FC = () => {
     };
 
     function _sum() {
-        let sumCalc = revenues.reduce(function (total, currentValue) {
+        let sumCalc = expenses.reduce(function (total, currentValue) {
             return total + parseFloat(currentValue.bucks.toString());
         }, 0);
         setSum(sumCalc);
+
+        try {
+            AsyncStorage.setItem(STORAGE_KEY_SUM, JSON.stringify(sumCalc));
+        } catch (error) {
+            // Error saving data
+            console.error(error, "erro ao salvar soma")
+        }
     }
 
     async function remove(id: string) {
@@ -150,7 +150,7 @@ const Expenses: React.FC = () => {
                         // We have data!!
                         newRevenues = JSON.parse(response).filter(e => e.id !== id);
                     }
-                    setRevenues(newRevenues);
+                    setExpenses(newRevenues);
                     AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newRevenues));
                 });
 
@@ -158,7 +158,7 @@ const Expenses: React.FC = () => {
             // Error retrieving data
             (response) => {
                 console.error(response)
-                setRevenues([]);
+                setExpenses([]);
             }
         }
         finally {
@@ -214,16 +214,16 @@ const Expenses: React.FC = () => {
             </View>
             <FlatList
                 style={styles.flatlist}
-                data={revenues}
-                renderItem={({ item, index }) => _renderItem(item, index)}
+                data={expenses}
+                renderItem={({ item, index }) => _renderItem(item)}
                 keyExtractor={item => item.id}
             />
 
             <View style={styles.menu}>
-                <Menu onAddPress={() => navigate('Dashboard')}
+                <FooterMenu onAddPress={() => navigate('Dashboard')}
                     onDebtPress={() => navigate('Debt')}
                     onExpensesPress={() => navigate('Expenses')}
-                    onInvestimentsPress={() => navigate('Investiments')}
+                    onInvestmentsPress={() => navigate('Investiments')}
                     onRevenuePress={() => navigate('Revenue')}
                     defaultColor={defaultColor}
                 />

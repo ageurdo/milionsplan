@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesome } from '@expo/vector-icons';
-import { StyleSheet, View, Text, Platform, FlatList, AsyncStorage } from 'react-native';
+import { StyleSheet, View, Text, Image, FlatList, AsyncStorage } from 'react-native';
 import { verticalScale } from 'react-native-size-matters';
 import theme from './../../constants/theme';
 import HeaderDashboard from './components/headerDashboard/headerDashboard';
 import ItemOverviewTab from './components/OverviewTab/item/Item';
 import OverviewTab from './components/OverviewTab/OverviewTab';
 import Tab from './components/tab/Tab';
-import Menu from '../../components/menu/Menu';
+import FooterMenu from '../../components/menu/FooterMenu';
 import { useNavigation } from '@react-navigation/native';
 import ItemList, { Item } from '../../components/itemList/ItemList';
 
@@ -20,7 +20,10 @@ const Dashboard: React.FC<Props> = (props) => {
     const [promptInsertVisible, setPromptInsertVisible] = useState(false);
     const { navigate } = useNavigation();
     const [revenues, setRevenues] = useState<Item[]>([]);
-    const STORAGE_KEY = 'Debts'
+    const [revenuesSum, setRevenuesSum] = useState(0);
+    const [debtsSum, setDebstSum] = useState(0);
+    const [expensesSum, setExpensesSum] = useState(0);
+    const [investmentsSum, setInvestimentsSum] = useState(0);
     //#endregion
 
     //#region LIFECYCLE (useEffect)
@@ -44,20 +47,57 @@ const Dashboard: React.FC<Props> = (props) => {
                 dateTime={revenue.dateTime}
                 bucks={revenue.bucks}
                 colorDefault={defaultColor}
+                isSwipeable={false}
             />
         );
     }
 
     function getData() {
         try {
-            AsyncStorage.getItem(STORAGE_KEY)
+            // Revenues Sum
+            AsyncStorage.getItem('Revenues_Sum')
                 .then((response) => {
-                    let newRevenue = [];
+                    let newRevenueSum = 0;
                     if (response !== null) {
                         // We have data!!
-                        newRevenue = JSON.parse(response);
+                        newRevenueSum = JSON.parse(response);
                     }
-                    setRevenues(newRevenue);
+                    setRevenuesSum(newRevenueSum);
+                });
+
+            // Expenses
+            AsyncStorage.getItem('Expenses_Sum')
+                .then((response) => {
+                    let newExpensesSum = 0;
+                    if (response !== null) {
+                        // We have data!!
+                        newExpensesSum = JSON.parse(response);
+                    }
+                    setExpensesSum(newExpensesSum);
+                });
+
+            // Debt
+            AsyncStorage.getItem('Debts_Sum')
+                .then((response) => {
+                    let newDebtsSum = 0;
+                    if (response !== null) {
+                        // We have data!!
+                        newDebtsSum = JSON.parse(response);
+                    }
+                    setDebstSum(newDebtsSum);
+                    console.log(newDebtsSum, "newDebtsSum");
+                });
+
+            // Investiments Sum
+            AsyncStorage.getItem('Investments_Sum')
+                .then((response) => {
+                    let newInvestimentsSum = 0;
+                    if (response !== null) {
+                        // We have data!!
+                        newInvestimentsSum = JSON.parse(response);
+                    }
+                    setInvestimentsSum(newInvestimentsSum);
+                    console.log(newInvestimentsSum, "newInvestimentsSum");
                 });
 
         } catch (error) {
@@ -77,7 +117,7 @@ const Dashboard: React.FC<Props> = (props) => {
         return (
             <View>
                 <View>
-                    <Text style={styles.transactionsTitle}>Últimos movimentos</Text>
+                    <Text style={styles.transactionsTitle}>Lastest Transactions</Text>
                 </View>
 
                 <View style={styles.tab}>
@@ -116,9 +156,20 @@ const Dashboard: React.FC<Props> = (props) => {
                     colorIcon={defaultColor}
                 />
             </View>
+            <View style={{ alignItems: 'center' }}>
+                <Text style={styles.title}>Dashboard</Text>
+            </View>
+            <View style={styles.content}>
+                <View style={styles.balanco}>
+                    <Image style={{ height: verticalScale(150), width: verticalScale(150) }} source={require('./../../../assets/graph.png')}></Image>
+                </View>
+                <View style={styles.overviewTab} >
+                    <OverviewTab label={"Revenues"} value={revenuesSum.toString()} color={theme.colors.defaultGreenColor} />
+                    <OverviewTab label={"Expenses"} value={expensesSum.toString()} color={theme.colors.defaultRedColor} />
+                    <OverviewTab label={"Debts"} value={debtsSum.toString()} color={theme.colors.defaultOrangeColor} />
+                    <OverviewTab label={"Investments"} value={investmentsSum.toString()} color={theme.colors.defaultPurpleColor} />
 
-            <View style={styles.overviewTab} >
-                <OverviewTab />
+                </View>
 
             </View>
             <View style={styles.transactions} >
@@ -126,10 +177,10 @@ const Dashboard: React.FC<Props> = (props) => {
             </View>
 
             <View style={styles.menu}>
-                <Menu onAddPress={() => { setPromptInsertVisible(true) }}
+                <FooterMenu onAddPress={() => { setPromptInsertVisible(true) }}
                     onDebtPress={() => navigate('Debt')}
                     onExpensesPress={() => navigate('Expenses')}
-                    onInvestimentsPress={() => navigate('Investiments')}
+                    onInvestmentsPress={() => navigate('Investiments')}
                     onRevenuePress={() => navigate('Revenue')}
                     defaultColor={defaultColor}
                 />
@@ -148,14 +199,9 @@ const styles = StyleSheet.create({
         height: verticalScale(200),
         zIndex: 0,
     },
-    overviewTab: {
-        top: -50,
-        marginHorizontal: 20,
-        height: verticalScale(250),
-    },
     tab: {
         flexDirection: 'row',
-        marginHorizontal: 15
+        marginHorizontal: 5,
     },
     transactions: {
     },
@@ -171,6 +217,35 @@ const styles = StyleSheet.create({
         bottom: 0,
         width: '100%',
     },
+    title: {
+        paddingTop: 15,
+        fontSize: 30,
+        textAlign: 'center',
+        fontFamily: theme.fonts.semiBoldFont.fontFamily,
+    },
+
+    content: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        marginVertical: 20,
+    },
+    overviewTab: {
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+    },
+    balanco: {
+        width: '50%',
+        alignItems: 'flex-start',
+        justifyContent: 'center',
+
+    },
+    // itens: {
+    //     alignItems: 'flex-end',
+    //     width: '50%',
+    //     height: '100%',
+    //     // backgroundColor: 'red',
+    //     flexDirection: 'column',
+    // },
 
 
 });

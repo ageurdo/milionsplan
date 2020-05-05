@@ -3,8 +3,7 @@ import { View, StyleSheet, FlatList } from 'react-native';
 import Header from '../../components/header/Header';
 import ItemList, { Item } from '../../components/itemList/ItemList';
 import Totaltab from '../../components/totalTab/TotalTab';
-import Dashboard from '../../screens/dashboard/Dashboard';
-import Menu from '../../components/menu/Menu';
+import FooterMenu from '../../components/menu/FooterMenu';
 import { verticalScale } from 'react-native-size-matters';
 import { useNavigation } from '@react-navigation/native';
 import { AsyncStorage } from 'react-native';
@@ -21,35 +20,30 @@ const Debt: React.FC = () => {
     const [promptEditVisible, setPromptEditVisible] = useState(false);
     const [sum, setSum] = useState(0);
 
-    const [revenues, setRevenues] = useState<Item[]>([]);
+    const [debts, setDebts] = useState<Item[]>([]);
     const [backup, setBackup] = useState<Item>(null);
 
     const STORAGE_KEY = 'Debts'
-
-    useEffect(
-        () => {
-            getData();
-        },
-        [promptInsertVisible, promptEditVisible]
-    );
+    const STORAGE_KEY_SUM = 'Debts_Sum'
 
     useEffect(
         () => {
             _sum();
+            getData();
         },
-        [revenues]
+        [debts, promptInsertVisible, promptEditVisible]
     );
 
-    function _renderItem(revenue: Item) {
+    function _renderItem(debt: Item) {
         return (
             < ItemList
-                id={revenue.id}
-                description={revenue.description}
-                dateTime={revenue.dateTime}
-                bucks={revenue.bucks}
-                btnRemovePress={() => { remove(revenue.id) }}
+                id={debt.id}
+                description={debt.description}
+                dateTime={debt.dateTime}
+                bucks={debt.bucks}
+                btnRemovePress={() => { remove(debt.id) }}
                 btnEditPress={() => {
-                    setBackup(revenue);
+                    setBackup(debt);
                     setPromptEditVisible(true)
                 }}
                 colorDefault={defaultColor}
@@ -58,10 +52,10 @@ const Debt: React.FC = () => {
         );
     }
 
-    async function setData(revenue: Item) {
+    async function setData(debt: Item) {
         try {
-            let newRevenues = [...revenues, revenue];
-            AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newRevenues));
+            let newDebts = [...debts, debt];
+            AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newDebts));
         } catch (error) {
             // Error saving data
             console.error(error, "erro ao atualizar")
@@ -72,24 +66,24 @@ const Debt: React.FC = () => {
         }
     };
 
-    async function updateData(revenue: Item) {
+    async function updateData(debt: Item) {
 
         try {
 
-            for (let index = 0; index < revenues.length; index++) {
+            for (let index = 0; index < debts.length; index++) {
 
-                if (revenues[index].id == revenue.id) {
+                if (debts[index].id == debt.id) {
                     //altera
-                    revenues[index] = revenue;
-                    console.log(revenues[index], 'alterado');
+                    debts[index] = debt;
+                    console.log(debts[index], 'alterado');
 
-                    setRevenues(revenues);
-                    console.log(revenues, 'Lista alterada');
+                    setDebts(debts);
+                    console.log(debts, 'Lista alterada');
                     break;
                 }
             }
 
-            AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(revenues));
+            AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(debts));
 
 
 
@@ -107,19 +101,19 @@ const Debt: React.FC = () => {
         try {
             AsyncStorage.getItem(STORAGE_KEY)
                 .then((response) => {
-                    let newRevenue = [];
+                    let newDebt = [];
                     if (response !== null) {
                         // We have data!!
-                        newRevenue = JSON.parse(response);
+                        newDebt = JSON.parse(response);
                     }
-                    setRevenues(newRevenue);
+                    setDebts(newDebt);
                 });
 
         } catch (error) {
             // Error retrieving data
             (response) => {
                 console.error(response)
-                setRevenues([]);
+                setDebts([]);
             }
         }
         finally {
@@ -128,30 +122,37 @@ const Debt: React.FC = () => {
     };
 
     function _sum() {
-        let sumCalc = revenues.reduce(function (total, currentValue) {
+        let sumCalc = debts.reduce(function (total, currentValue) {
             return total + parseFloat(currentValue.bucks.toString());
         }, 0);
         setSum(sumCalc);
+
+        try {
+            AsyncStorage.setItem(STORAGE_KEY_SUM, JSON.stringify(sumCalc));
+        } catch (error) {
+            // Error saving data
+            console.error(error, "erro ao salvar soma")
+        }
     }
 
     async function remove(id: string) {
         try {
             AsyncStorage.getItem(STORAGE_KEY)
                 .then((response) => {
-                    let newRevenues = [];
+                    let newDebts = [];
                     if (response !== null) {
                         // We have data!!
-                        newRevenues = JSON.parse(response).filter(e => e.id !== id);
+                        newDebts = JSON.parse(response).filter(e => e.id !== id);
                     }
-                    setRevenues(newRevenues);
-                    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newRevenues));
+                    setDebts(newDebts);
+                    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newDebts));
                 });
 
         } catch (error) {
             // Error retrieving data
             (response) => {
                 console.error(response)
-                setRevenues([]);
+                setDebts([]);
             }
         }
         finally {
@@ -159,7 +160,7 @@ const Debt: React.FC = () => {
         }
     }
 
-    function _renderPromptEdit(revenue?: Item) {
+    function _renderPromptEdit(debt?: Item) {
 
         return (
             <View style={styles.prompt}>
@@ -168,7 +169,7 @@ const Debt: React.FC = () => {
                     labelBtnCancel={'Fechar'}
                     btnConfirmPress={updateData}
                     btnCancelPress={() => { setPromptEditVisible(false) }}
-                    item={revenue}
+                    item={debt}
                     defaultColor={defaultColor}
                 />
             </View>
@@ -207,17 +208,17 @@ const Debt: React.FC = () => {
             </View>
             <FlatList
                 style={styles.flatlist}
-                data={revenues}
-                renderItem={({ item, index }) => _renderItem(item)}
+                data={debts}
+                renderItem={({ item }) => _renderItem(item)}
                 keyExtractor={item => item.id}
             />
 
             <View style={styles.menu}>
-                <Menu onAddPress={() => navigate('Dashboard')}
+                <FooterMenu onAddPress={() => navigate('Dashboard')}
                     onDebtPress={() => navigate('Debt')}
                     onExpensesPress={() => navigate('Expenses')}
-                    onInvestimentsPress={() => navigate('Investiments')}
-                    onRevenuePress={() => navigate('Revenue')}
+                    onInvestmentsPress={() => navigate('Investiments')}
+                    onRevenuePress={() => navigate('debt')}
                     defaultColor={defaultColor}
                 />
             </View>

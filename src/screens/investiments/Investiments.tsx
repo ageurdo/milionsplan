@@ -3,7 +3,7 @@ import { View, StyleSheet, FlatList } from 'react-native';
 import Header from '../../components/header/Header';
 import ItemList, { Item } from '../../components/itemList/ItemList';
 import Totaltab from '../../components/totalTab/TotalTab';
-import Menu from '../../components/menu/Menu';
+import FooterMenu from '../../components/menu/FooterMenu';
 import { verticalScale } from 'react-native-size-matters';
 import { useNavigation } from '@react-navigation/native';
 import { AsyncStorage } from 'react-native';
@@ -13,17 +13,18 @@ import theme from '../../constants/theme';
 
 const defaultColor = theme.colors.defaultPurpleColor;
 const secondColor = theme.colors.secondPurpleColor;
-const Investiments: React.FC = () => {
+const Investments: React.FC = () => {
 
     const { navigate } = useNavigation();
     const [promptInsertVisible, setPromptInsertVisible] = useState(false);
     const [promptEditVisible, setPromptEditVisible] = useState(false);
     const [sum, setSum] = useState(0);
 
-    const [revenues, setRevenues] = useState<Item[]>([]);
+    const [investments, setInvestments] = useState<Item[]>([]);
     const [teste, setTeste] = useState<Item>(null);
 
     const STORAGE_KEY = 'Investments'
+    const STORAGE_KEY_SUM = 'Investments_Sum'
 
     useEffect(
         () => {
@@ -36,7 +37,7 @@ const Investiments: React.FC = () => {
         () => {
             _sum();
         },
-        [revenues]
+        [investments]
     );
 
     function _renderItem(revenue: Item) {
@@ -59,8 +60,8 @@ const Investiments: React.FC = () => {
 
     async function setData(revenue: Item) {
         try {
-            let newRevenues = [...revenues, revenue];
-            AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newRevenues));
+            let newInvestments = [...investments, revenue];
+            AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newInvestments));
         } catch (error) {
             // Error saving data
             console.error(error, "erro ao atualizar")
@@ -75,20 +76,17 @@ const Investiments: React.FC = () => {
 
         try {
 
-            for (let index = 0; index < revenues.length; index++) {
+            for (let index = 0; index < investments.length; index++) {
 
-                if (revenues[index].id == revenue.id) {
-                    //altera
-                    revenues[index] = revenue;
-                    console.log(revenues[index], 'alterado');
-
-                    setRevenues(revenues);
-                    console.log(revenues, 'Lista alterada');
+                if (investments[index].id == revenue.id) {
+                    //alterado
+                    investments[index] = revenue;
+                    setInvestments(investments);
                     break;
                 }
             }
 
-            AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(revenues));
+            AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(investments));
 
 
 
@@ -111,14 +109,16 @@ const Investiments: React.FC = () => {
                         // We have data!!
                         newRevenue = JSON.parse(response);
                     }
-                    setRevenues(newRevenue);
+                    setInvestments
+                        (newRevenue);
                 });
 
         } catch (error) {
             // Error retrieving data
             (response) => {
                 console.error(response)
-                setRevenues([]);
+                setInvestments
+                    ([]);
             }
         }
         finally {
@@ -127,30 +127,39 @@ const Investiments: React.FC = () => {
     };
 
     function _sum() {
-        let sumCalc = revenues.reduce(function (total, currentValue) {
+        let sumCalc = investments.reduce(function (total, currentValue) {
             return total + parseFloat(currentValue.bucks.toString());
         }, 0);
         setSum(sumCalc);
+
+        try {
+            AsyncStorage.setItem(STORAGE_KEY_SUM, JSON.stringify(sumCalc));
+        } catch (error) {
+            // Error saving data
+            console.error(error, "erro ao salvar soma")
+        }
     }
 
     async function remove(id: string) {
         try {
             AsyncStorage.getItem(STORAGE_KEY)
                 .then((response) => {
-                    let newRevenues = [];
+                    let newInvestments = [];
                     if (response !== null) {
                         // We have data!!
-                        newRevenues = JSON.parse(response).filter(e => e.id !== id);
+                        newInvestments = JSON.parse(response).filter(e => e.id !== id);
                     }
-                    setRevenues(newRevenues);
-                    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newRevenues));
+                    setInvestments
+                        (newInvestments);
+                    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(newInvestments));
                 });
 
         } catch (error) {
             // Error retrieving data
             (response) => {
                 console.error(response)
-                setRevenues([]);
+                setInvestments
+                    ([]);
             }
         }
         finally {
@@ -206,16 +215,16 @@ const Investiments: React.FC = () => {
             </View>
             <FlatList
                 style={styles.flatlist}
-                data={revenues}
+                data={investments}
                 renderItem={({ item, index }) => _renderItem(item)}
                 keyExtractor={item => item.id}
             />
 
             <View style={styles.menu}>
-                <Menu onAddPress={() => navigate('Dashboard')}
+                <FooterMenu onAddPress={() => navigate('Dashboard')}
                     onDebtPress={() => navigate('Debt')}
                     onExpensesPress={() => navigate('Expenses')}
-                    onInvestimentsPress={() => navigate('Investiments')}
+                    onInvestmentsPress={() => navigate('Investments')}
                     onRevenuePress={() => navigate('Revenue')}
                     defaultColor={defaultColor}
                 />
@@ -260,4 +269,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default Investiments;
+export default Investments;

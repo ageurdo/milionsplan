@@ -1,17 +1,21 @@
-import React from 'react';
-import { StyleSheet, View, Text, Image } from 'react-native';
-import ItemOverviewTab from './item/Item';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, Text, Image, AsyncStorage, Platform } from 'react-native';
 import theme from '../../../../constants/theme';
 import { verticalScale } from 'react-native-size-matters';
+import { Item } from '../../../../components/itemList/ItemList';
+import { FontAwesome } from '@expo/vector-icons';
 
 interface Props {
     style?: any,
+    label: string,
+    color: string,
+    value: string,
 }
 
 const OverviewTab: React.FC<Props> = (props) => {
 
     //#region LETS AND CONSTS
-
+    const [revenues, setRevenues] = useState<Item[]>([]);
     //#endregion
 
     //#region LIFECYCLE (useEffect)
@@ -19,29 +23,53 @@ const OverviewTab: React.FC<Props> = (props) => {
     //#endregion
 
     //#region METHODS
+    function getData(storagekey: string) {
+        try {
+            AsyncStorage.getItem(storagekey)
+                .then((response) => {
+                    let newRevenue = [];
+                    if (response !== null) {
+                        // We have data!!
+                        newRevenue = JSON.parse(response);
+                    }
+                    setRevenues(newRevenue);
+                });
 
+        } catch (error) {
+            // Error retrieving data
+            (response) => {
+                console.error(response)
+                setRevenues([]);
+            }
+        }
+        finally {
+            // _sum();
+        }
+    };
     //#endregion
 
     //#region RENDER METHODS
+    function _renderItemOverviewTab() {
 
+        return (
+            <View style={styles.containerItemOverviewTab}>
+                <View style={styles.containerItem}>
+                    <Text style={styles.labelItem}>{props.label}</Text>
+                    <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                        <FontAwesome name="circle" size={12} color={props.color} />
+                        <Text style={styles.valueItem}>${props.value}</Text>
+                    </View>
+                </View>
+            </View>
+        )
+    }
     //#endregion
 
     return (
         <View style={styles.container}>
-            <View style={{ alignItems: 'center' }}>
-                <Text style={styles.title}>Dashboard</Text>
-            </View>
-            <View style={styles.content}>
-                <View style={styles.balanco}>
-                    <Image style={{ height: verticalScale(150), width: verticalScale(150) }} source={require('./../../../../../assets/graph.png')}></Image>
-                </View>
-                <View style={styles.itens}>
-                    <ItemOverviewTab label={"Receitas"} value={"5020"} color={theme.colors.defaultGreenColor} />
-                    <ItemOverviewTab label={"Despesas"} value={"2500"} color={theme.colors.defaultRedColor} />
-                    <ItemOverviewTab label={"Dívidas"} value={"800"} color={theme.colors.defaultOrangeColor} />
-                    <ItemOverviewTab label={"Investimentos"} value={"260"} color={theme.colors.defaultPurpleColor} />
-                </View>
-            </View>
+
+            {_renderItemOverviewTab()}
+
         </View>
     )
 
@@ -49,40 +77,33 @@ const OverviewTab: React.FC<Props> = (props) => {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: 'white',
-        borderRadius: 25,
+        // backgroundColor: 'white',
+        borderRadius: 5,
         flexDirection: 'column',
         width: '100%',
     },
 
-    title: {
-        paddingTop: 15,
-        fontSize: 30,
-        textAlign: 'center',
-        fontFamily: theme.fonts.semiBoldFont.fontFamily,
-    },
-    content: {
-        flexDirection: 'row',
-        // justifyContent: 'space-between',
-        alignItems: 'center',
-        marginHorizontal: 40,
-        height: verticalScale(200),
-    },
-    balanco: {
-        width: '50%',
-        flexDirection: 'row',
-        alignItems: 'center',
-        // backgroundColor: 'yellow',
-        height: '100%',
-        justifyContent: 'center',
+    // OverviewItem
 
+    containerItemOverviewTab: {
+        flex: 1,
     },
-    itens: {
-        alignItems: 'flex-end',
-        width: '50%',
-        height: '100%',
-        // backgroundColor: 'red',
+    containerItem: {
+        margin: 0,
         flexDirection: 'column',
+        alignItems: 'flex-end',
+        paddingVertical: 5,
+    },
+    labelItem: {
+        fontSize: verticalScale(10),
+        fontFamily: theme.fonts.italic.fontFamily,
+        color: 'grey',
+        marginBottom: Platform.OS == 'web' ? -5 : 10,
+    },
+    valueItem: {
+        fontSize: verticalScale(20),
+        fontFamily: theme.fonts.boldFont.fontFamily,
+        marginLeft: 10,
     },
 
 });

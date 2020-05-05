@@ -3,14 +3,13 @@ import { View, StyleSheet, FlatList } from 'react-native';
 import Header from '../../components/header/Header';
 import ItemList, { Item } from '../../components/itemList/ItemList';
 import Totaltab from '../../components/totalTab/TotalTab';
-import Menu from '../../components/menu/Menu';
+import FooterMenu from '../../components/menu/FooterMenu';
 import { verticalScale } from 'react-native-size-matters';
 import { useNavigation } from '@react-navigation/native';
 import { AsyncStorage } from 'react-native';
 import PromptEdit from '../../components/prompt/edit/PromptEdit';
 import PromptInsert from '../../components/prompt/insert/PromptInsert';
 import theme from '../../constants/theme';
-import Dashboard from '../../screens/dashboard/Dashboard';
 
 const defaultColor = theme.colors.defaultGreenColor;
 const secondColor = theme.colors.secondGreenColor;
@@ -25,19 +24,14 @@ const Revenue: React.FC = () => {
     const [backup, setBackup] = useState<Item>(null);
 
     const STORAGE_KEY = 'Revenues'
-
-    useEffect(
-        () => {
-            getData();
-        },
-        [promptInsertVisible, promptEditVisible]
-    );
+    const STORAGE_KEY_SUM = 'Revenues_Sum'
 
     useEffect(
         () => {
             _sum();
+            getData();
         },
-        [revenues]
+        [revenues, promptInsertVisible, promptEditVisible]
     );
 
     function _renderItem(revenue: Item) {
@@ -132,6 +126,13 @@ const Revenue: React.FC = () => {
             return total + parseFloat(currentValue.bucks.toString());
         }, 0);
         setSum(sumCalc);
+
+        try {
+            AsyncStorage.setItem(STORAGE_KEY_SUM, JSON.stringify(sumCalc));
+        } catch (error) {
+            // Error saving data
+            console.error(error, "erro ao salvar soma")
+        }
     }
 
     async function remove(id: string) {
@@ -208,15 +209,15 @@ const Revenue: React.FC = () => {
             <FlatList
                 style={styles.flatlist}
                 data={revenues}
-                renderItem={({ item, index }) => _renderItem(item)}
+                renderItem={({ item }) => _renderItem(item)}
                 keyExtractor={item => item.id}
             />
 
             <View style={styles.menu}>
-                <Menu onAddPress={() => navigate('Dashboard')}
+                <FooterMenu onAddPress={() => navigate('Dashboard')}
                     onDebtPress={() => navigate('Debt')}
                     onExpensesPress={() => navigate('Expenses')}
-                    onInvestimentsPress={() => navigate('Investiments')}
+                    onInvestmentsPress={() => navigate('Investiments')}
                     onRevenuePress={() => navigate('Revenue')}
                     defaultColor={defaultColor}
                 />

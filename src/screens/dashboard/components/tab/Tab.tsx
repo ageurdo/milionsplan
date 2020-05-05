@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { verticalScale } from 'react-native-size-matters';
+import { verticalScale, moderateScale } from 'react-native-size-matters';
 
 interface Props {
     label: string,
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
     },
     label: {
-        fontSize: verticalScale(15),
+        fontSize: moderateScale(15),
         textAlign: 'center',
         color: 'white',
         padding: 10,

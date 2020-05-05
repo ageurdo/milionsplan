@@ -109,7 +109,7 @@ const Header: React.FC<Props> = (props) => {
 
                     <TouchableOpacity style={styles.containerLogo} >
                         <View style={{ width: moderateScale(40) }}>
-                            {/* {Logo()} */}
+                            {Logo()}
                         </View>
                     </TouchableOpacity>
 
